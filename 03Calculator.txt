@@ -62,9 +62,9 @@ void draw_main_menu() {
     printf("\n|         5 challenge!              |");
     printf("\n|                                   |");
     printf("\n|         0 quit                    |");
-    printf("\n|      Name:zirui Chen              |");
-    printf("\n|      Nick name:H41eyC             |");
-    printf("\n|      Number:21052107              |");
+    printf("\n|                                   |");
+    printf("\n|                                   |");
+    printf("\n|                                   |");
     printf("\n=====================================\n");
 
 }
