@@ -97,8 +97,8 @@ void drawMainMenu() {
     printf("\n   3.story3             0.quit           ");
     printf("\n                                         ");
     printf("\n                                         ");
-    printf("\n     Author:ZiRui Chen                   ");
-    printf("\n     ID: 21052107                        ");
+    printf("\n                                         ");
+    printf("\n                                         ");
     printf("\n                                         ");
     printf("\n=========================================");
 }
