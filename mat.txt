@@ -1,0 +1,136 @@
+#include "stdio.h"
+#include "stdlib.h"
+#include "math.h"
+#include "limits.h"
+#define N 20
+
+void trans(double arr[N][N],double arrT[N][N]);
+void upper(double arr[N][N],double arrU[N][N]);
+void lower(double arr[N][N],double arrL[N][N]);
+void displayMat(char* text, double arr[N][N]);
+void set(double arr[N][N]);
+void Matrix();
+void matMainMenu();
+
+int main(){
+    Matrix();
+}
+
+void sort() {
+    int a[100], minIndex;
+    for (int i=0;i<100;)
+        a[i++] = rand()%99;
+
+    for (int i=0;i<99;i++){
+        minIndex = i;
+        for (int j=i+1;j<100;j++){
+            if (a[j]<=a[minIndex])
+                minIndex = j;
+        }
+        int tmp=a[i];
+        a[i] = a[minIndex];
+        a[minIndex] = tmp;
+//        a[i] += a[minIndex];
+//        a[minIndex] = a[i] - a[minIndex];
+//        a[i] = a[i] - a[minIndex];
+    }
+
+    for (int i=0;i<100;)
+        printf("%d ",a[i++]);
+}
+
+
+void Matrix(){
+    int usrInput = 999;
+    double mat[N][N],tmpMat[N][N];
+    for (int i=0;i<N;i++)
+        for (int j=0;j<N;j++)
+            mat[i][j] = rand()%99;
+
+    while (usrInput!=0){
+        system("cls");
+        displayMat("Current Mat:\n",mat);
+        matMainMenu();
+        scanf("%d",&usrInput);
+        if (usrInput==1){
+            trans(mat,tmpMat);
+            displayMat("After trans:\n", tmpMat);
+            getchar();
+        }
+        if (usrInput==2){
+            upper(mat,tmpMat);
+            displayMat("Upper:\n", tmpMat);
+            getchar();
+        }
+        if (usrInput==3){
+            lower(mat,tmpMat);
+            displayMat("Lower:\n", tmpMat);
+            getchar();
+        }
+        if (usrInput==4){
+            set(mat);
+        }
+        getchar();
+    }
+}
+
+void trans(double arr[N][N],double arrT[N][N]){
+    for (int i=0;i<N;i++)
+        for (int j=0;j<N;j++)
+            arrT[i][j] = arr[j][i];
+}
+
+void upper(double arr[N][N],double arrU[N][N]){
+    for (int i=0;i<N;i++)
+        arrU[0][i] = arr[0][i];
+    for (int i=0;i<N;i++)
+        for (int j=i+1;j<N;j++){
+            for (int k=i;k<N;k++){
+                arrU[j][k] = arr[j][k] - arr[i][k]*(arr[j][i]/arr[i][i]);
+            }
+        }
+}
+
+void lower(double arr[N][N],double arrL[N][N]){
+    for (int i=0;i<N;i++)
+        arrL[N-1][i] = arr[N-1][i];
+    for (int i=N-1;i>-1;i--)
+        for (int j=i-1;j>-1;j--){
+            for (int k=i;k>-1;k--){
+                arrL[j][k] = arr[j][k] - arr[i][k]*(arr[j][i]/arr[i][i]);
+            }
+        }
+}
+
+void displayMat(char* text, double arr[N][N]){
+    printf("%s", text);
+    for (int i=0;i<N;i++) {
+        for (int j = 0; j < N; j++) {
+            printf("%5.0lf", arr[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void set(double arr[N][N]){
+    int x,y;
+    double v;
+    printf("\nPlease input the row:");
+    scanf("%d",&x);
+    printf("\nPlease input the column:");
+    scanf("%d",&y);
+    printf("\nPlease input the value:");
+    scanf("%lf",&v);
+    arr[x][y] = v;
+}
+
+void matMainMenu(){
+    printf("\n===============================MATRIX_MAIN_MENU=========================================");
+    printf("\n                                                                                        ");
+    printf("\n    1.trans                                                 2.lower                     ");
+    printf("\n    3.upper                                                 4.setValue                  ");
+    printf("\n                                                                                        ");
+    printf("\n                                                                                        ");
+    printf("\n                                 0.quit                                                 ");
+    printf("\n========================================================================================\n");
+}

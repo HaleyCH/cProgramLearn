@@ -1,0 +1,258 @@
+#include "stdio.h"
+#include "stdlib.h"
+
+#define N 20
+
+void trans(double arr[N][N], double arrT[N][N]);
+void upper(double arr[N][N], double arrU[N][N]);
+void lower(double arr[N][N], double arrL[N][N]);
+void displayMat(char *text, double arr[N][N]);
+void set(double arr[N][N]);
+void Matrix();
+void matMainMenu();
+void halfFind();
+void bSort();
+void cSort();
+void years();
+void stringConvert();
+void mainMenu();
+
+int main() {
+    int usrInput = 999;
+
+    while (usrInput != 0) {
+        system("cls");
+        mainMenu();
+        scanf("%d", &usrInput);
+        if (usrInput == 1) {
+            halfFind();
+            getchar();
+        }
+        if (usrInput == 2) {
+            bSort();
+            getchar();
+        }
+        if (usrInput == 3) {
+            cSort();
+            getchar();
+        }
+        if (usrInput == 4) {
+            Matrix();
+            getchar();
+        }
+        if (usrInput == 5) {
+            years();
+            getchar();
+        }
+        if (usrInput == 6) {
+            stringConvert();
+            getchar();
+        }
+        getchar();
+    }
+}
+
+
+void mainMenu() {
+    system("color 09");
+    printf("\n================================MAIN_MENU===============================================");
+    printf("\n                                                                                        ");
+    printf("\n    1.halfFind                                              2.bubbleSort                ");
+    printf("\n    3.selectionSort                                         4.matrix                    ");
+    printf("\n    5.years                                                 6.binaryConvert             ");
+    printf("\n                                                                                        ");
+    printf("\n                                 0.quit                                                 ");
+    printf("\n========================================================================================\n");
+}
+
+void stringConvert() {
+    printf("\nPlease input a string:");
+    int len = 0, alphas[1025] = {0};
+    char c;
+    while ((c = getchar()) != EOF)
+        if (c == '\n') {
+            alphas[len] = '\0';
+            break;
+        } else if (c >= 'a' && c <= 'f') {
+            alphas[len++] = c - 'a' + 10;
+        } else if (c >= '0' && c <= '9')
+            alphas[len++] = c - '0';
+        else if (c >= 'A' && c <= 'F')
+            alphas[len++] = c - 'A' + 10;
+    printf("\nCurrent string:");
+    for (int i = 0; i < len; i++) {
+        printf("%c", (alphas[i] < 10) ? alphas[i] + '0' : alphas[i] + 'A');
+    }
+    int k = 0;
+    unsigned long long i = alphas[k++];
+    while (k < len)
+        i = i * 16 + alphas[k++];
+    printf("\nAfter convert: %llu", i);
+}
+
+void cSort() {
+    int a[100], minIndex;
+    for (int i = 0; i < 100;)
+        a[i++] = rand() % 99;
+
+    for (int i = 0; i < 99; i++) {
+        minIndex = i;
+        for (int j = i + 1; j < 100; j++) {
+            if (a[j] <= a[minIndex])
+                minIndex = j;
+        }
+        int tmp = a[i];
+        a[i] = a[minIndex];
+        a[minIndex] = tmp;
+    }
+
+    for (int i = 0; i < 100;)
+        printf("%d ", a[i++]);
+}
+
+void bSort() {
+    int a[100];
+    for (int i = 0; i < 100;)
+        a[i++] = rand() % 99;
+
+    for (int i = 0; i < 99; i++) {
+        for (int j = 100; j > i; j--)
+            if (a[i] < a[j]) {
+                int tmp = a[i];
+                a[i] = a[j];
+                a[j] = tmp;
+            }
+    }
+    for (int i = 0; i < 100;)
+        printf("%d ", a[i++]);
+}
+
+void Matrix() {
+    int usrInput = 999;
+    double mat[N][N], tmpMat[N][N];
+    for (int i = 0; i < N; i++)
+        for (int j = 0; j < N; j++)
+            mat[i][j] = rand() % 99;
+
+    while (usrInput != 0) {
+        system("cls");
+        displayMat("Current Mat:\n", mat);
+        matMainMenu();
+        scanf("%d", &usrInput);
+        if (usrInput == 1) {
+            trans(mat, tmpMat);
+            displayMat("After trans:\n", tmpMat);
+            getchar();
+        }
+        if (usrInput == 2) {
+            upper(mat, tmpMat);
+            displayMat("Upper:\n", tmpMat);
+            getchar();
+        }
+        if (usrInput == 3) {
+            lower(mat, tmpMat);
+            displayMat("Lower:\n", tmpMat);
+            getchar();
+        }
+        if (usrInput == 4) {
+            set(mat);
+        }
+        getchar();
+    }
+}
+
+void trans(double arr[N][N], double arrT[N][N]) {
+    for (int i = 0; i < N; i++)
+        for (int j = 0; j < N; j++)
+            arrT[i][j] = arr[j][i];
+}
+
+void upper(double arr[N][N], double arrU[N][N]) {
+    for (int i = 0; i < N; i++)
+        arrU[0][i] = arr[0][i];
+    for (int i = 0; i < N; i++)
+        for (int j = i + 1; j < N; j++) {
+            for (int k = i; k < N; k++) {
+                arrU[j][k] = arr[j][k] - arr[i][k] * (arr[j][i] / arr[i][i]);
+            }
+        }
+}
+
+void lower(double arr[N][N], double arrL[N][N]) {
+    for (int i = 0; i < N; i++)
+        arrL[N - 1][i] = arr[N - 1][i];
+    for (int i = N - 1; i > -1; i--)
+        for (int j = i - 1; j > -1; j--) {
+            for (int k = i; k > -1; k--) {
+                arrL[j][k] = arr[j][k] - arr[i][k] * (arr[j][i] / arr[i][i]);
+            }
+        }
+}
+
+void displayMat(char *text, double arr[N][N]) {
+    printf("%s", text);
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            printf("%5.0lf", arr[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void set(double arr[N][N]) {
+    int x, y;
+    double v;
+    printf("\nPlease input the row:");
+    scanf("%d", &x);
+    printf("\nPlease input the column:");
+    scanf("%d", &y);
+    printf("\nPlease input the value:");
+    scanf("%lf", &v);
+    arr[x - 1][y - 1] = v;
+}
+
+void matMainMenu() {
+    printf("\n===============================MATRIX_MAIN_MENU=========================================");
+    printf("\n                                                                                        ");
+    printf("\n    1.trans                                                 2.lower                     ");
+    printf("\n    3.upper                                                 4.setValue                  ");
+    printf("\n                                                                                        ");
+    printf("\n                                                                                        ");
+    printf("\n                                 0.quit                                                 ");
+    printf("\n========================================================================================\n");
+}
+
+void halfFind() {
+    int a[100], n, i = 0, j = 100, m;
+    for (int i = 0; i < 100;)
+        a[i++] = i * 3 - 1;
+    for (int i = 0; i < 100;)
+        printf("%d ", a[i++]);
+    printf("\nPlease input the number you want to find:");
+    scanf("%d", &n);
+    while (i < j) {
+        m = (int) ((i + j) / 2);
+        if (n == a[m]) {
+            printf("\nFind %d in pos %d", n, m);
+        }
+        if (n < a[m])
+            j = m - 1;
+        else
+            i = m + 1;
+    }
+}
+
+void years() {
+    int y, m, d, w1;
+    printf("\nPlease input the date(yyyy-mm-dd):");
+    scanf("%d-%d-%d", &y, &m, &d);
+
+    w1 = (y + (y - 1) / 4 - (y - 1) / 100 + (y - 1) / 400) % 7;
+    int month[12] = {31, (y % 4 == 0) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}, total = 0;
+    printf("\n%d is%s leap year.", y, (y % 4 == 0) ? "" : " not");
+    for (int i = 0; i < m - 1;)
+        total += month[i++];
+    total += d;
+    printf("\n%d-%d-%d is the %dth day of %d.", y, m, d, total, y);
+    printf("\nAnd it's the %dth day of the week.", (w1 + total - 1) % 7);
+}

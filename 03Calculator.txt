@@ -1,0 +1,246 @@
+/*
+ * Name:Calculator
+ * Date:18 Oct, 2021
+ * LastUpdate: 14 Dec, 2021
+ * Author: Chen ZiRui
+ * CopyRight: all rights reserved
+ * Version: 1.0.1 F
+ */
+#include <stdio.h>
+#include <stdlib.h>
+
+void draw_main_menu();
+
+int create_add();
+int create_sub();
+int create_mul();
+int create_div();
+int create_chal();
+
+void practice_add();
+void practice_sub();
+void practice_mul();
+void practice_div();
+void practice_chal();
+
+void exit_message();
+void message(int ctr);
+
+int main() {
+    system("color 09");
+    printf("Press enter to enter...");
+
+    int usrInput = -1;
+    while (usrInput != 0) {
+        getchar();
+        system("cls");
+        draw_main_menu();
+        scanf("%d", &usrInput);
+        if (usrInput == 1)
+            practice_add();
+        if (usrInput == 2)
+            practice_sub();
+        if (usrInput == 3)
+            practice_mul();
+        if (usrInput == 4)
+            practice_div();
+        if (usrInput == 5)
+            practice_chal();
+            getchar();
+    }
+    exit_message();
+}
+
+
+void draw_main_menu() {
+    system("cls");
+    printf("\n===============menu==================");
+    printf("\n|                                   |");
+    printf("\n|  1 add                2 sub       |");
+    printf("\n|  3 mul                4 div       |");
+    printf("\n|                                   |");
+    printf("\n|         5 challenge!              |");
+    printf("\n|                                   |");
+    printf("\n|         0 quit                    |");
+    printf("\n|      Name:zirui Chen              |");
+    printf("\n|      Nick name:H41eyC             |");
+    printf("\n|      Number:21052107              |");
+    printf("\n=====================================\n");
+
+}
+
+int create_add() {
+    int a, b;
+    a = rand() % 10;
+    b = rand() % 10;
+    printf("\n%d + %d = ?\n", a, b);
+    return a + b;
+}
+
+int create_sub() {
+    int a, b;
+    a = rand() % 10;
+    b = rand() % 10;
+    if (b > a) {
+        a = a + b;
+        b = a - b;
+        a = a - b;
+    }
+    printf("\n%d - %d = ?\n", a, b);
+    return a - b;
+}
+
+int create_mul() {
+    int a, b;
+    a = rand() % 10;
+    b = rand() % 10;
+    printf("\n%d * %d = ?\n", a, b);
+    return a * b;
+}
+
+int create_div() {
+    int a, b;
+    a = rand() % 10 + 1;
+    b = rand() % 10 + 1;
+    printf("\n%d / %d = ?\n", a * b, a);
+    return b;
+}
+
+int create_chal() {
+    int opt = rand() % 4 + 1;
+    int ans;
+    switch (opt) {
+        case 1:
+            ans = create_add();
+            break;
+        case 2:
+            ans = create_sub();
+            break;
+        case 3:
+            ans = create_mul();
+            break;
+        case 4:
+            ans = create_div();
+            break;
+    }
+    return ans;
+}
+
+void exit_message() {
+    system("cls");
+    printf("\n                                                        ");
+    printf("\n                                                        ");
+    printf("\n #########      #       #    ##########       ##       ");
+    printf("\n #        #     #       #    #        #       ##        ");
+    printf("\n #        #      #     #     #                ##        ");
+    printf("\n #########         ###       #######          ##        ");
+    printf("\n #        #         #        #                ##        ");
+    printf("\n #        #         #        #                          ");
+    printf("\n #        #         #        #        #       ##        ");
+    printf("\n #########         ###       ##########       ##        ");
+    printf("\n                                                        ");
+    printf("\n                                                        ");
+    getchar();
+    getchar();
+}
+
+void message(int ctr) {
+    if (ctr==0)
+        printf("\nWrong answer!");
+
+    if (ctr <= 3)
+        printf("\nGreat!");
+    else if (ctr <= 6)
+        printf("\nGood Job!");
+    else if (ctr <= 9)
+        printf("\nFantastic!");
+    else
+        printf("\nIntermediate!");
+
+    printf("\nYou've finish %d problems.", ctr);
+}
+
+void practice_add(){
+    printf("\nEnter 999 to exit.");
+    int ans, usrInput = -1, ctr=0;
+    while (usrInput != 999) {
+        ans = create_add();
+        scanf("%d", &usrInput);
+        if (usrInput==999)
+            break;
+        if (usrInput==ans){
+            ctr++;
+        } else{
+            ctr=0;
+        }
+        message(ctr);
+    }
+}
+
+void practice_sub(){
+    printf("\nEnter 999 to exit.");
+    int ans, usrInput = -1, ctr=0;
+    while (usrInput != 999) {
+        ans = create_sub();
+        scanf("%d", &usrInput);
+        if (usrInput==999)
+            break;
+        if (usrInput==ans){
+            ctr++;
+        } else{
+            ctr=0;
+        }
+        message(ctr);
+    }
+}
+
+void practice_mul(){
+    printf("\nEnter 999 to exit.");
+    int ans, usrInput = -1, ctr=0;
+    while (usrInput != 999) {
+        ans = create_mul();
+        scanf("%d", &usrInput);
+        if (usrInput==999)
+            break;
+        if (usrInput==ans){
+            ctr++;
+        } else{
+            ctr=0;
+        }
+        message(ctr);
+    }
+}
+
+void practice_div(){
+    printf("\nEnter 999 to exit.");
+    int ans, usrInput = -1, ctr=0;
+    while (usrInput != 999) {
+        ans = create_div();
+        scanf("%d", &usrInput);
+        if (usrInput==999)
+            break;
+        if (usrInput==ans){
+            ctr++;
+        } else{
+            ctr=0;
+        }
+        message(ctr);
+    }
+}
+
+void practice_chal(){
+    printf("\nEnter 999 to exit.");
+    int ans, usrInput = -1, ctr=0;
+    while (usrInput != 999) {
+        ans = create_chal();
+        scanf("%d", &usrInput);
+        if (usrInput==999)
+            break;
+        if (usrInput==ans){
+            ctr++;
+        } else{
+            ctr=0;
+        }
+        message(ctr);
+    }
+}

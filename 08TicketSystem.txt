@@ -1,0 +1,182 @@
+/*
+ * Name:Tickets System
+ * Date:13 Dec, 2021
+ * LastUpdate: 14 Dec, 2021
+ * Author: Chen ZiRui
+ * CopyRight: all rights reserved
+ * Version: 1.1.2 F
+ */
+#include "stdio.h"
+#include "stdlib.h"
+
+#define N 100
+#define Reserved 1
+#define Sold 2
+#define Available 0
+
+
+void book(int i[N][N]);
+void sell(int i[N][N]);
+void refund(int i[N][N]);
+void cancel(int i[N][N]);
+void printAll(int i[N][N], int x, int y);
+void getVal(int *x, int *y);
+void create(int *x, int *y);
+void drawMainMenu();
+void search(int i[N][N]);
+void chk(int x, int y, int *usrInput);
+
+int main() {
+    system("color 09");
+    printf("Press enter to enter...");
+    int sizeX=0, sizeY=0, theaterMap[N][N] = {0};
+    //create(&sizeX, &sizeY);
+    int usrInput = 999;
+    while (usrInput != 0) {
+        getchar();
+        system("cls");
+        // printAll(theaterMap, sizeX, sizeY);
+        drawMainMenu();
+        scanf("%d", &usrInput);
+        chk(sizeX, sizeY, &usrInput);
+        //system("cls");
+        // printAll(theaterMap, sizeX, sizeY);
+        if (usrInput == 1)
+            create(&sizeX, &sizeY);
+        if (usrInput == 2)
+            printAll(theaterMap, sizeX, sizeY);
+        if (usrInput == 3) {
+            printAll(theaterMap, sizeX, sizeY);
+            sell(theaterMap);
+        }
+        if (usrInput == 4){
+            printAll(theaterMap, sizeX, sizeY);
+            refund(theaterMap);
+        }
+        if (usrInput == 5){
+            printAll(theaterMap, sizeX, sizeY);
+            book(theaterMap);
+        }
+        if (usrInput == 6){
+            printAll(theaterMap, sizeX, sizeY);
+            cancel(theaterMap);
+        }
+        if (usrInput == 7){
+            printAll(theaterMap, sizeX, sizeY);
+            search(theaterMap);
+        }
+        getchar();
+    }
+}
+
+void create(int *x, int *y) {
+    system("cls");
+    printf("\nPlease input the row of theater:");
+    scanf("%d", y);
+    printf("\nPlease input the column of theater:");
+    scanf("%d", x);
+}
+
+void book(int i[N][N]) {
+    printf("\n===============book=========================");
+    int x, y;
+    getVal(&x, &y);
+    if (i[x][y] == Available) {
+        i[x][y] = Reserved;
+        printf("\nSuccessfully book it.");
+    } else {
+        printf("\nThis position is not available.");
+    }
+    getchar();
+}
+
+void sell(int i[N][N]) {
+    printf("\n================buy/sell======================");
+    int x, y;
+    getVal(&x, &y);
+    if (i[x][y] == Available) {
+        i[x][y] = Sold;
+        printf("\nSuccessfully bought it.");
+    } else {
+        printf("\nThis position is not available.");
+    }
+    getchar();
+}
+
+void refund(int i[N][N]) {
+    printf("\n================refund========================");
+    int x, y;
+    getVal(&x, &y);
+    if (i[x][y] != Sold) {
+        printf("\nYou have no need to refund it.");
+        getchar();
+        return;
+    }
+    i[x][y] = Available;
+    printf("\nSuccessfully refund it.");
+    getchar();
+}
+
+void cancel(int i[N][N]){
+    printf("\n================cancel========================");
+    int x, y;
+    getVal(&x, &y);
+    if (i[x][y] != Reserved) {
+        printf("\nYou have no need to cancel it.");
+        getchar();
+        return;
+    }
+    i[x][y] = Available;
+    printf("\nSuccessfully cancel it.");
+    getchar();
+}
+
+void printAll(int i[N][N], int x, int y){
+    printf("\n=============theater_map======================");
+    printf("\n%d = Available                  %d = Reserved ",Available,Reserved);
+    printf("\n%d = Sold                                     ",Sold);
+    printf("\n");
+    for (int j=0;j<y;j++){
+        printf("\n");
+        for (int k=0;k<x;k++){
+            printf("%d ",i[k][j]);
+        }
+    }
+    printf("\n");
+}
+
+void getVal(int *x, int *y){
+    printf("\nPlease input the row you want:");
+    scanf("%d",y);
+    printf("\nPlease input the column you want:");
+    scanf("%d",x);
+    *y = *y - 1;
+    *x = *x - 1;
+}
+
+void drawMainMenu(){
+    printf("\n==========TICKET_SYSTEM=======================");
+    printf("\n   1.createTheater         2.showStatus       ");
+    printf("\n   3.buy/sell              4.refund           ");
+    printf("\n   5.book                  6.cancellation     ");
+    printf("\n   7.search                0.exit             ");
+    // printf("\n==============================================\n");
+}
+
+void search(int i[N][N]){
+    int x,y;
+    printf("\n=============search===========================");
+    getVal(&x, &y);
+    printf("\nTICKET:( %d, %d) is %s.", x, y,(i[x][y]==Sold)?"Sold":(i[x][y]==Reserved)?"Reserved":"Available");
+    getchar();
+}
+
+void chk(int x, int y, int *usrInput){
+    if (*usrInput>1&&(x==0||y==0)){
+        system("cls");
+        printf("\nPlease Create Theater first!");
+        *usrInput = 1;
+        getchar();
+        getchar();
+    }
+}

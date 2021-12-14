@@ -1,0 +1,117 @@
+#include "stdio.h"
+#include "stdlib.h"
+
+#define N 100
+#define Reserved 1
+#define Sold 2
+#define Available 0
+
+
+void reserve(int i[N][N]);
+void sell(int i[N][N]);
+void cancel(int i[N][N]);
+void printAll(int i[N][N], int x, int y);
+void getVal(int *x, int *y);
+void create(int *x, int *y);
+void drawMainMenu();
+
+int main() {
+    system("color 09");
+    int sizeX, sizeY, theaterMap[N][N] = {0};
+    create(&sizeX, &sizeY);
+    int usrInput = 999;
+    while (usrInput != 0) {
+        getchar();
+        system("cls");
+        printAll(theaterMap, sizeX, sizeY);
+        drawMainMenu();
+        scanf("%d", &usrInput);
+        system("cls");
+        printAll(theaterMap, sizeX, sizeY);
+        if (usrInput == 1)
+            sell(theaterMap);
+        if (usrInput == 2)
+            reserve(theaterMap);
+        if (usrInput == 3)
+            cancel(theaterMap);
+
+    }
+}
+
+void create(int *x, int *y) {
+    system("cls");
+    printf("\nPlease input the row of theater:");
+    scanf("%d", y);
+    printf("\nPlease input the column of theater:");
+    scanf("%d", x);
+}
+
+void reserve(int i[N][N]) {
+    printf("\n===============reserve========================");
+    int x, y;
+    getVal(&x, &y);
+    if (i[x][y] == Available) {
+        i[x][y] = Reserved;
+        printf("\nSuccessfully reserved.");
+    } else {
+        printf("\nThis position is not available.");
+    }
+    getchar();
+}
+
+void sell(int i[N][N]) {
+    printf("\n================buy/sell======================");
+    int x, y;
+    getVal(&x, &y);
+    if (i[x][y] == Available) {
+        i[x][y] = Sold;
+        printf("\nSuccessfully bought it.");
+    } else {
+        printf("\nThis position is not available.");
+    }
+    getchar();
+}
+
+void cancel(int i[N][N]) {
+    printf("\n================cancel========================");
+    int x, y;
+    getVal(&x, &y);
+    if (i[x][y] == Available) {
+        printf("\nYou have no need to cancel it.");
+        getchar();
+        return;
+    }
+    i[x][y] = Available;
+    printf("\nSuccessfully canceled it.");
+    getchar();
+}
+void printAll(int i[N][N], int x, int y){
+    printf("\n=============theater_map======================");
+    printf("\n%d = Available                  %d = Reserved ",Available,Reserved);
+    printf("\n%d = Sold                                     ",Sold);
+    for (int j=0;j<y;j++){
+        printf("\n");
+        for (int k=0;k<x;k++){
+            printf("%d ",i[k][j]);
+        }
+    }
+    printf("\n");
+}
+
+void getVal(int *x, int *y){
+    printf("\nPlease input the row you want:");
+    scanf("%d",y);
+    printf("\nPlease input the column you want:");
+    scanf("%d",x);
+    *y = *y - 1;
+    *x = *x - 1;
+}
+
+void drawMainMenu(){
+    printf("\n==========theater_manage_program==============");
+    printf("\n                                              ");
+    printf("\n   1.buy/sell              2.reserve          ");
+    printf("\n   3.cancel                0.quit             ");
+    printf("\n                                              ");
+    // printf("\n==============================================\n");
+}

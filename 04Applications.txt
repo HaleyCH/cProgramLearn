@@ -1,0 +1,191 @@
+/*
+ * Name:Applications
+ * Date:21 Oct, 2021
+ * LastUpdate: 14 Dec, 2021
+ * Author: Chen ZiRui
+ * CopyRight: all rights reserved
+ * Version: 0.0.1 F
+ */
+#include "stdio.h"
+#include "stdlib.h"
+
+void drawMainMenu();
+void chicken();
+void triangle();
+void rent();
+void car();
+void table();
+void chessBoard();
+void factorizationMenu();
+void factorize(int i);
+void characterAnalysis();
+
+int main() {
+    system("color 09");
+    int usrInput = 1;
+    printf("Press any key to continue...");
+    while (usrInput != 0) {
+        drawMainMenu();
+        //getchar();
+        scanf("%d", &usrInput);
+        if (usrInput == 1)
+            chicken();
+        if (usrInput == 2)
+            triangle();
+        if (usrInput == 3)
+            rent();
+        if (usrInput == 4)
+            car();
+        if (usrInput == 5)
+            table();
+        if (usrInput == 6)
+            chessBoard();
+        if (usrInput == 7)
+            factorizationMenu();
+        if (usrInput == 8)
+            characterAnalysis();
+        getchar();
+    }
+}
+
+void drawMainMenu() {
+    getchar();
+    system("cls");
+    printf("\n=========================================");
+    printf("\n                                         ");
+    printf("\n   1.chicken            2.triangle       ");
+    printf("\n   3.rent               4.car            ");
+    printf("\n   5.table              6.chessBoard     ");
+    printf("\n   7.factorization      8.character      ");
+    printf("\n             0.quit                      ");
+    printf("\n     Author:ZiRui Chen                   ");
+    printf("\n     ID: 21052107                        ");
+    printf("\n                                         ");
+    printf("\n=========================================");
+}
+
+void chicken() {
+    // Rooster 5/1 Hen 3/1 Chick 1/3
+    int numR = 0, numH, numC;
+    for (; 100 - 5 * numR > 0; numR++) {
+        numH = 0;
+        for (; 100 - 5 * numR - 3 * numH > 0; numH++) {
+            numC = 100 - numR - numH;
+            if (numR * 15 + numH * 9 + numC == 300)
+                printf("%d %d %d\n", numR, numH, numC);
+        }
+    }
+}
+
+void triangle() {
+    int n = 1000, cnt = 0;
+    for (int c = 1; c <= n; c++)
+        for (int a = 1; a < c; a++)
+            for (int b = 1; b < a; b++) {
+//                if (a + b < c)
+//                    continue;
+                if (a * a + b * b == c * c) {
+                    cnt++;
+                    printf("%d %d %d \n", b, a, c);
+                }
+            }
+    printf("total: %d\n", cnt);
+
+}
+
+void rent() {
+    int n = 5, cnt = 0;
+    for (int a = 1; a <= n; a++)
+        for (int b = 1; b <= n; b++)
+            for (int c = 1; c <= n; c++) {
+                if (a == b || b == c || c == a)
+                    continue;
+                cnt++;
+                (cnt % 3 == 0) ? printf("%d %d %d\n", a, b, c) : printf("%d %d %d         ", a, b, c);
+                //printf("%d %d %d\n", a, b, c);
+            }
+    printf("\n");
+}
+
+void car() {
+    for (int i = 1; i < 99; i++) {
+        int ii = i * i;
+        // printf("%d\n",ii);
+        if (ii / 1000 == (ii / 100) % 10 && (ii / 10) % 10 == ii % 10)
+            printf("%d%d%d%d\n", ii / 1000, ii / 1000, ii % 10, ii % 10);
+    }
+}
+
+void table() {
+    for (int i = 1; i < 10; i++) {
+        for (int j = 1; j <= i; j++) {
+            printf("%d * %d = %d   ", j, i, i * j);
+        }
+        printf("\n");
+    }
+}
+
+void chessBoard() {
+    for (int i = 0; i < 17; i++) {
+        for (int j = 0; j < 17; j++)
+            if ((i + j) % 2 == 0)
+                printf("##");
+            else
+                printf("  ");
+        printf("\n");
+    }
+}
+
+void factorizationMenu(){
+    int uInput=0;
+    while (1){
+        system("cls");
+        printf("Input 888 to exit.\n");
+        printf("Input a positive number \n");
+        scanf("%d",&uInput);
+        if (uInput==888)
+            break;
+        factorize(uInput);
+        getchar();
+    }
+}
+
+
+void factorize(int i){
+    int j=2;
+    printf("%d = ",i);
+    while (i!=1){
+        if (i%j==0)
+            if (i/j!=1)
+                printf(" %d *",j);
+            else
+                printf(" %d",j);
+        else{
+            j++;
+            continue;
+        }
+        i = i/j;
+    }
+}
+
+void characterAnalysis(){
+    char string[1025],c;
+    scanf("%s",string);
+    int i=0,ctrL=0,ctrN=0,ctrS=0,ctrO=0;
+    while (string[i]!='\0'){
+        c = string[i];
+        if (c>'0'&&c<'9')
+            ctrN++;
+        else if (c==' '||c=='\n')
+            ctrS++;
+        else if ((c>=97&&c<97+26)||(c>=65&&c<65+26))
+            ctrL++;
+        else
+            ctrO++;
+        i++;
+        }
+    printf("Letters: %d \n",ctrL);
+    printf("Numbers: %d\n",ctrN);
+    printf("Spaces: %d\n",ctrS);
+    printf("Others: %d\n",ctrO);
+}

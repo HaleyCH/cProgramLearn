@@ -1,0 +1,31 @@
+#include "stdio.h"
+
+int climb(int i);
+int rMul(int i);
+long long Hanoi(int n,char a,char b,char c);
+
+int main() {
+    printf("%lld", Hanoi(30,'A','B','C'));
+}
+
+int climb(int i) {
+    if (i == 1 )
+        return 1;
+    if (i == 2 )
+        return 2;
+    return climb(i - 1) + climb(i - 2);
+}
+
+int rMul(int i){
+    if (i==1)
+        return 1;
+    return i* rMul(i-1);
+}
+
+long long Hanoi(int n,char a,char b,char c){
+    if (n==1) {
+        printf("%c => %c\n",a,b);
+        return 1;
+    }
+    return Hanoi(n-1,a,c,b)+ Hanoi(1,a,b,c)+ Hanoi(n-1,c,b,a);
+}

@@ -1,0 +1,340 @@
+/* Name: Math_learning
+   CopyRight: ZiRui Chen
+   Time: 13/9/2021 dd/mm/yyyy
+*/
+#include <stdio.h>
+#include <stdlib.h>
+
+void create_main_menu();
+int create_add();
+int create_sub();
+int create_mul();
+int create_div();
+void create_chal();
+void exit_message();
+
+int main()
+{
+    int inp=0;
+    srand((unsigned)time(NULL));
+    printf("         Welcome! Press any key to continue...      \n");
+    while(inp!=9){
+        int ans = 0,u_ans=-1;
+        getchar();  // 使回显能被用户看到，因为有回车符，所以两次。XP
+        create_main_menu();
+        scanf("%d",&inp);
+        while (u_ans!=ans){
+            switch (inp){
+                case 1:
+                ans = create_add();
+                break;
+            case 2:
+                ans = create_sub();
+                break;
+            case 3:
+                ans = create_mul();
+                break;
+            case 4:
+                ans = create_div();
+                break;
+            case 5:
+                create_chal();
+                break;
+            default:
+                inp = 9;
+            }
+            if (inp==5){
+                create_main_menu();
+                scanf("%d",&u_ans);
+                continue;
+            }
+            if (inp!=9)
+                scanf("%d",&u_ans);
+            if (u_ans==ans)
+                printf("\nYou are right!");
+                break;
+            printf("\nWrong Answer!Try again!");
+            getchar();
+        }
+    }
+    exit_message();
+}
+
+
+void create_main_menu(){
+    system("cls");
+    printf("\n===============menu==================");
+    printf("\n|                                   |");
+    printf("\n|  1 add                2 sub       |");
+    printf("\n|  3 mul                4 div       |");
+    printf("\n|                                   |");
+    printf("\n|         5 challenge!              |");
+    printf("\n|                                   |");
+    printf("\n|                                   |");
+    printf("\n|      Name:zirui Chen              |");
+    printf("\n|      Nick name:H41eyC             |");
+    printf("\n|      Number:21052107              |");
+    printf("\n=====================================\n");
+
+}
+
+int create_add(){
+    int a,b;
+    a = rand()%10;
+    b = rand()%10;
+    printf("\n%d + %d = ?\n", a, b);
+    return a+b;
+}
+
+int create_sub(){
+    int a,b;
+    a = rand()%10;
+    b = rand()%10;
+    if (b>a){
+        a = a+b;
+        b = a-b;
+        a = a-b;
+    }
+    printf("\n%d - %d = ?\n", a, b);
+    return a-b;
+}
+
+int create_mul(){
+    int a,b;
+    a = rand()%10;
+    b = rand()%10;
+    printf("\n%d * %d = ?\n", a, b);
+    return a*b;
+}
+
+int create_div(){
+    int a,b;
+    a = rand()%10+1;
+    b = rand()%10+1;
+    printf("\n%d / %d = ?\n", a*b, a);
+    return b;
+}
+
+void create_chal(){
+    int opt = rand()%4+1;
+    int ctr=0;
+    printf("\nStart !Enter 999 to exit.");
+    int ans = 0,u_ans=-1;
+    while(u_ans!=999){
+        switch (opt){
+            case 1:
+                ans = create_add();
+                break;
+            case 2:
+                ans = create_sub();
+                break;
+            case 3:
+                ans = create_mul();
+                break;
+            case 4:
+                ans = create_div();
+                break;
+        }
+        scanf("%d",&u_ans);
+        if (u_ans==999){
+            printf("Exit the challenge!");
+            break;
+        }
+        if (u_ans==ans){
+            printf("\nYou are right!,You've finish %d challenges!\n",++ctr);
+            opt = rand()%4+1;
+        }
+        else
+            printf("\nWrong Answer!Try again!\n");
+    }
+    getchar();
+    getchar();
+}
+
+void exit_message(){
+    system("cls");
+    printf("\n                                                        ");
+    printf("\n                                                        ");
+    printf("\n #########      #       #    ##########       ##       ");
+    printf("\n #        #     #       #    #        #       ##        ");
+    printf("\n #        #      #     #     #                ##        ");
+    printf("\n #########         ###       #######          ##        ");
+    printf("\n #        #         #        #                ##        ");
+    printf("\n #        #         #        #                          ");
+    printf("\n #        #         #        #        #       ##        ");
+    printf("\n #########         ###       ##########       ##        ");
+    printf("\n                                                        ");
+    printf("\n                                                        ");
+    getchar();
+    getchar();
+}
+
+
+
+------------------ 原始邮件 ------------------
+发件人: "·"<1617335718@qq.com>;
+发送时间: 2021年9月13日(星期一) 中午12:13
+收件人: "·"<1617335718@qq.com>;
+主题: 回复：程设0000作业
+
+/* Name: Math_learning
+   CopyRight: ZiRui Chen
+   Time: 13/9/2021 dd/mm/yyyy
+
+
+*/
+#include <stdio.h>
+#include <stdlib.h>
+
+void create_main_menu();
+int create_add();
+int create_sub();
+int create_mul();
+int create_div();
+void create_chal();
+void exit_message();
+
+int main()
+{
+    int inp=0;
+    srand((unsigned)time(NULL));
+    printf("         Welcome! Press any key twice to continue...      \n");
+    while(inp!=9){
+        int ans = 0,u_ans=-1;
+        getchar();  // 使回显能被用户看到，因为有回车符，所以两次。XP
+        getchar();
+        create_main_menu();
+        scanf("%d",&inp);
+        while (u_ans!=ans){
+            switch (inp){
+                case 1:
+                ans = create_add();
+                break;
+            case 2:
+                ans = create_sub();
+                break;
+            case 3:
+                ans = create_mul();
+                break;
+            case 4:
+                ans = create_div();
+                break;
+            case 5:
+                create_chal();
+                break;
+            default:
+                inp = 9;
+            }
+            if (inp!=9)
+                scanf("%d",&u_ans);
+            if (u_ans==ans)
+                printf("\nYou are right!");
+                break;
+            printf("\nWrong Answer!Try again!");
+        }
+    }
+    exit_message();
+}
+
+
+void create_main_menu(){
+    system("cls");
+    printf("\n===============menu==================");
+    printf("\n|                                   |");
+    printf("\n|  1 add                2 sub       |");
+    printf("\n|  3 mul                4 div       |");
+    printf("\n|                                   |");
+    printf("\n|         5 challenge!              |");
+    printf("\n|                                   |");
+    printf("\n|                                   |");
+    printf("\n|      Name:zirui Chen              |");
+    printf("\n|      Nick name:H41eyC             |");
+    printf("\n|      Number:21052107              |");
+    printf("\n=====================================\n");
+
+}
+
+int create_add(){
+    int a,b;
+    a = rand()%10;
+    b = rand()%10;
+    printf("\n%d + %d = ?\n", a, b);
+    return a+b;
+}
+
+int create_sub(){
+    int a,b;
+    a = rand()%10;
+    b = rand()%10;
+    if (b>a){
+        a = a+b;
+        b = a-b;
+        a = a-b;
+    }
+    printf("\n%d - %d = ?\n", a, b);
+    return a-b;
+}
+
+int create_mul(){
+    int a,b;
+    a = rand()%10;
+    b = rand()%10;
+    printf("\n%d * %d = ?\n", a, b);
+    return a*b;
+}
+
+int create_div(){
+    int a,b;
+    a = rand()%10+1;
+    b = rand()%10+1;
+    printf("\n%d / %d = ?\n", a*b, a);
+    return b;
+}
+
+void create_chal(){
+    int opt = rand()%4+1;
+    int ctr=0;
+    printf("\nStart !Enter 999 to exit.");
+    int ans = 0,u_ans=-1;
+    while(u_ans!=999){
+        switch (opt){
+            case 1:
+                ans = create_add();
+                break;
+            case 2:
+                ans = create_sub();
+                break;
+            case 3:
+                ans = create_mul();
+                break;
+            case 4:
+                ans = create_div();
+                break;
+        }
+        scanf("%d",&u_ans);
+        if (u_ans==ans){
+            printf("\nYou are right!,You've finish %d challenges!\n",++ctr);
+            opt = rand()%4+1;
+        }
+        else
+            printf("\nWrong Answer!Try again!\n");
+    }
+}
+
+void exit_message(){
+    system("cls");
+    printf("\n                                                        ");
+    printf("\n                                                        ");
+    printf("\n #########      #       #    ##########       ##       ");
+    printf("\n #        #     #       #    #        #       ##        ");
+    printf("\n #        #      #     #     #                ##        ");
+    printf("\n #########         ###       #######          ##        ");
+    printf("\n #        #         #        #                ##        ");
+    printf("\n #        #         #        #                          ");
+    printf("\n #        #         #        #        #       ##        ");
+    printf("\n #########         ###       ##########       ##        ");
+    printf("\n                                                        ");
+    printf("\n                                                        ");
+    getchar();
+    getchar();
+}

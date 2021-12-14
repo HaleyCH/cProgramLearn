@@ -1,0 +1,176 @@
+
+#include <iostream>
+#include <cstring>
+#include <iomanip>
+
+using namespace std;
+
+class URL {
+private:
+    int len{0};
+    char str[1025]{'\0'};
+    int _posName[1020]{0};// first element record the amount of & and ?
+    int _posVal[1020]{0};// first element record the amount of =
+    int _posSlash[6]{0}; // first element record the amount of /
+public:
+    URL() = default;
+
+    explicit URL(char S[]) { set(S); };
+
+    void set(const char S[]) {
+        int i = -1, j = 0, ctr = 0;
+        while (S[++i] != '\0')
+            if (S[i] != '%') {
+                str[j++] = (S[i] == '+') ? ' ' : S[i];
+                // record
+                if (S[i] == '/') {
+                    _posSlash[++_posSlash[0]] = j;
+                } else if (S[i] == '?' || S[i] == '&') {
+                    _posName[++_posName[0]] = j;
+                } else if (S[i] == '=') {
+                    _posVal[++_posVal[0]] = j;
+                }
+            } else {
+                int tmp = 0;
+                if (S[++i] <= '9' && S[i] >= '0')
+                    tmp += 16 * (S[i] - '0');
+                else if (S[i] >= 'a' && S[i] <= 'f')
+                    tmp += 16 * (S[i] - 'a' + 10);
+                else
+                    tmp += 16 * (S[i] - 'A' + 10);
+                if (S[++i] <= '9' && S[i] >= '0')
+                    tmp += (S[i] - '0');
+                else if (S[i] >= 'a' && S[i] <= 'f')
+                    tmp += (S[i] - 'a' + 10);
+                else
+                    tmp += (S[i] - 'A' + 10);
+                str[j++] = (char) tmp;
+            }
+        str[j++] = '\0';
+        len = j;
+        _posName[_posName[0]+1]=len;
+        if (_posName[0]==0)
+            _posName[1]==len;
+    }
+
+    void printURL() {
+        if (len == 0) {
+            cout << "URL is Empty" << endl;
+            return;
+        }
+        cout << "URL is";
+        for (int i = 1; i < len; i++)
+            putchar(str[i]);
+        putchar('\n');
+    }
+
+    void printProtocol() {
+        if (len == 0) {
+            cout << "URL is Empty" << endl;
+            return;
+        }
+        cout << "Protocol: ";
+        for (int i = 0; i < _posSlash[1]-1; i++)
+            if (islower(str[i]))
+                putchar(str[i] - 32);
+            else
+                putchar(str[i]);
+        putchar('\n');
+
+    }
+
+    void printDomain() {
+        if (len == 0) {
+            cout << "URL is Empty" << endl;
+            return;
+        }
+        cout << "Domain: ";
+        for (int i = _posSlash[2]; i < _posSlash[3] - 1; i++) {
+            putchar(str[i]);
+        }
+        putchar('\n');
+    }
+
+    void printFile() {
+        if (len == 0) {
+            cout << "URL is Empty" << endl;
+            return;
+        }
+        if (len==_posName[1]) {
+            cout << "Filename is Empty" << endl;
+            return;
+        }
+        cout << "Filename: ";
+        for (int i = _posSlash[_posSlash[0]]; i < _posName[1] - 1; i++) {
+            putchar(str[i]);
+        }
+        putchar('\n');
+    }
+
+    void printPath() {
+        if (len == 0) {
+            cout << "URL is Empty" << endl;
+            return;
+        }
+        if (_posSlash[0] <= 3||len!=_posName[1]) {
+            cout << "Path is Empty" << endl;
+            return;
+        }
+        cout<<"Path: ";
+        for (int i = _posSlash[3]; i < _posSlash[_posSlash[0]] - 1; i++) {
+            putchar(str[i]);
+        }
+        putchar('\n');
+    }
+
+    void printAllParam() {
+        if (len == 0) {
+            cout << "URL is Empty" << endl;
+            return;
+        }
+        printf("Number of parameter(s): %d\n",_posVal[0]);
+        int index[1020]{0};
+        for (int i = 1; i <= _posName[0]; i++)
+            index[i] = i;
+        for (int i = 1; i <= _posVal[0] - 1; i++) {
+            for (int j = i; j < _posVal[0]; j++) {
+                int k = 0;
+                while (str[_posName[index[i]] + k] == str[_posName[index[j]] + k] &&
+                       k < min((_posVal[index[i]] - _posName[index[i]]), (_posVal[index[j]] - _posName[index[j]])))
+                    k++;
+                if (str[_posName[index[i]] + k] > str[_posName[index[j]] + k])
+                    swap(index[i],index[j]);
+            }
+        }
+        for (int i = 1; i <= _posVal[0]; i++){
+            putchar('[');
+            for (int j=0;j<4;j++){
+                putchar(((_posVal[index[i]]-_posName[index[i]]-j-1)<=0)?' ':str[_posName[index[i]]+j]);
+            }
+            cout<<"] = [";
+            for (int j=_posVal[index[i]];j<_posName[index[i]+1]-1;j++)
+                putchar(str[j]);
+            cout<<"]"<<endl;
+        }
+    }
+};
+
+int main() {
+
+    char input[1025];
+
+    URL a;
+
+    cout << "Enter URL: ";
+    cin >> input;
+    a.set(input);
+
+    a.printURL();
+    a.printProtocol();
+    a.printDomain();
+    a.printPath();
+    a.printFile();
+    a.printAllParam();
+
+    return 0;
+}

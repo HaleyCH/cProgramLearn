@@ -1,0 +1,510 @@
+/*
+ * Name:Students MIS
+ * Date:6 Dec, 2021
+ * LastUpdate: 8 Dec, 2021
+ * Author: Chen ZiRui
+ * CopyRight: all rights reserved
+ * Version: 1.3.1 F
+ */
+#include "stdio.h"
+#include "stdlib.h"
+
+
+struct Student {
+    char stuNo[9];
+    char name[17];
+    char phone[12];
+    char weChat[8];
+    int dormitory[3];
+    int gender; // 1 male 2 female
+    double score;
+};
+
+void drawMainMenu();
+
+int strIn(const char *s, const char *S);
+int strCmp(const char *a, const char *b);
+char *double2str(double val, char *out);
+char *dormitory2str(struct Student stu, char *out);
+
+void loadData(struct Student stu[], int *len);
+void saveDataToFile(struct Student stu[], int len);
+
+void showAllStudents(struct Student stu[], int len);
+
+void searchStudent(struct Student stu[], int len, int resIndex[], int *resLen);
+void searchStudentWithKeyword(struct Student stu[], int len, int resIndex[], int *resLen, char* keyword);
+void addStudent(struct Student stu[], int *len);
+void modifyStudent(struct Student stu[], int len);
+void deleteStudent(struct Student stu[], int *len);
+
+void sortByStuNo(struct Student stu[], int len);
+void sortByName(struct Student stu[], int len);
+void sortByGender(struct Student stu[], int len);
+void sortByPhone(struct Student stu[], int len);
+void sortByWeChat(struct Student stu[], int len);
+void sortByDormitory(struct Student stu[], int len);
+void sortByScore(struct Student stu[], int len);
+
+void statisticsData(struct Student stu[], int len);
+void clearData(int *len);
+void showSelectData(struct Student stu[], int len);
+
+void displayStudent(struct Student stu);
+void displayStudents(struct Student stu[], int len);
+void displayStudentsByIndex(struct Student stu[], const int index[], int idxLen);
+
+int main() {
+    system("color 09");
+    struct Student students[100];
+    int dataLen = 0;
+    int usrInput = 1;
+    printf("Press enter to enter Students MIS...");
+    while (usrInput != 0) {
+        drawMainMenu();
+        //getchar();
+        scanf("%d", &usrInput);
+        if (usrInput == 1)
+            loadData(students, &dataLen);
+        if (usrInput == 2)
+            showAllStudents(students, dataLen);
+        if (usrInput == 3) {
+            int resIndex[100], resLen = 0;
+            searchStudent(students, dataLen, resIndex, &resLen);
+            // printf("\nID  stuNo  name     phone  weChat  dormitory  gender  score ");
+            displayStudentsByIndex(students, resIndex, resLen);
+        }
+        if (usrInput == 4)
+            addStudent(students, &dataLen);
+        if (usrInput == 5)
+            modifyStudent(students, dataLen);
+        if (usrInput == 6)
+            deleteStudent(students, &dataLen);
+        if (usrInput == 7)
+            sortByStuNo(students, dataLen);
+        if (usrInput == 8)
+            sortByName(students, dataLen);
+        if (usrInput == 9)
+            sortByGender(students, dataLen);
+        if (usrInput == 10)
+            sortByPhone(students, dataLen);
+        if (usrInput == 11)
+            sortByWeChat(students, dataLen);
+        if (usrInput == 12)
+            sortByDormitory(students, dataLen);
+        if (usrInput == 13)
+            sortByScore(students, dataLen);
+        if (usrInput == 14)
+            statisticsData(students, dataLen);
+        if (usrInput == 15)
+            clearData(&dataLen);
+        if (usrInput == 16)
+            saveDataToFile(students, dataLen);
+        if (usrInput == 17)
+            showSelectData(students, dataLen);
+
+        getchar();
+    }
+}
+
+void drawMainMenu() {
+    getchar();
+    system("cls");
+    printf("\n============================================================");
+    printf("\n   1.loadData                        2.showAllStus          ");
+    printf("\n   3.searchStudent                   4.addStudent           ");
+    printf("\n   5.modifyStudent                   6.deleteStudent        ");
+    printf("\n   7.sortByStuNo                     8.sortByName           ");
+    printf("\n   9.sortByGender                    10.sortByPhone         ");
+    printf("\n   11.sortByWeChat                   12.sortByDormitory     ");
+    printf("\n   13.sortByScore                    14.statisticsData      ");
+    printf("\n   15.clearData                      16.saveDataToFile      ");
+    printf("\n   17.showSelectedData                                      ");
+    printf("\n                       0.exit                               ");
+    printf("\n============================================================");
+}
+
+void loadData(struct Student stu[], int *len) {
+    FILE *fileObj = NULL;
+    fileObj = fopen("./stuInfo.dat", "r"); // stuNo, name, phone, weChat, dormitory1, 2, 3, gender, score
+    if (fileObj==NULL){
+        printf("\nLOAD ERROR");
+        return;
+    }
+    struct Student newStu;
+    int i = 0;
+    while (fscanf(fileObj, "%s %s %s %s %d %d %d %d %lf\n", newStu.stuNo, newStu.name, newStu.phone, newStu.weChat,
+                  &newStu.dormitory[0],
+                  &newStu.dormitory[1], &newStu.dormitory[2], &newStu.gender, &newStu.score) >= 9)
+        stu[i++] = newStu;
+    *len = i;
+    fclose(fileObj);
+    printf("\nFinished.");
+}
+
+void saveDataToFile(struct Student stu[], int len) {
+    FILE *fileObj = NULL;
+    fileObj = fopen("./stuInfo.dat", "w"); // stuNo, name, phone, weChat, dormitory1, 2, 3, gender, score
+    for (int i = 0; i < len; i++) {
+        fprintf(fileObj, "%s %s %s %s %d %d %d %d %lf\n", stu[i].stuNo, stu[i].name, stu[i].phone, stu[i].weChat,
+                stu[i].dormitory[0], stu[i].dormitory[1], stu[i].dormitory[2], stu[i].gender, stu[i].score);
+    }
+    fclose(fileObj);
+    printf("\nFinished.");
+}
+
+void showAllStudents(struct Student stu[], int len) {
+    printf("\nstuNo       name      phone          weChat      dormitory  gender   score ");
+    for (int i = 0; i < len; i++) {
+        printf("\n%-10s  %-8s  %-13s  %-10s  %-2d-%2d-%2d    %-7s  %.2lf", stu[i].stuNo, stu[i].name, stu[i].phone, stu[i].weChat,
+               stu[i].dormitory[0],
+               stu[i].dormitory[1], stu[i].dormitory[2], (stu[i].gender == 1 ? "Male" : "Female"), stu[i].score);
+    }
+}
+
+void searchStudent(struct Student stu[], int len, int resIndex[], int *resLen) {
+    *resLen = 0;
+    char retStr[100];
+    char keyword[17];
+    printf("\nPlease input keyword:");
+    scanf("%s", keyword);
+    searchStudentWithKeyword(stu, len, resIndex, resLen, keyword);
+}
+
+void searchStudentWithKeyword(struct Student stu[], int len, int resIndex[], int *resLen, char* keyword){
+    *resLen = 0;
+    char retStr[100];
+
+    for (int i = 0; i < len; i++) {
+        if ((strIn(keyword, stu[i].stuNo) + strIn(keyword, stu[i].name) + strIn(keyword, stu[i].phone) +
+             strIn(keyword, stu[i].weChat) + strIn(keyword, (stu[i].gender == 1 ? "Male" : "Female")) +
+             strIn(keyword, double2str(stu[i].score, retStr)) + strIn(keyword, dormitory2str(stu[i], retStr)))>0) {
+            //displayStudent(stu[i]);
+            resIndex[(*resLen)++] = i;
+        }
+    }
+}
+
+void addStudent(struct Student stu[], int *len) {
+    struct Student newStu;
+    printf("\nPlease input stuNO:");
+    scanf("%s", newStu.stuNo);
+    printf("\nPlease input name:");
+    scanf("%s", newStu.name);
+    printf("\nPlease input phone:");
+    scanf("%s", newStu.phone);
+    printf("\nPlease input weChat:");
+    scanf("%s", newStu.weChat);
+    printf("\nPlease input dormitory(a-b-c)");
+    scanf("%d-%d-%d", &newStu.dormitory[0], &newStu.dormitory[1], &newStu.dormitory[2]);
+    printf("\nPlease input gender (1=Male, 2=Female):");
+    scanf("%d", &newStu.gender);
+    printf("\nPlease input score:");
+    scanf("%lf", &newStu.score);
+    stu[(*len)++] = newStu;
+    printf("\nFinished.");
+}
+
+void modifyStudent(struct Student stu[], int len) {
+    int resLen = 0, i, res[100];
+    printf("\nWe need to select student first...");
+    searchStudent(stu, len, res, &resLen);
+    printf("\nPlease select the one you want to modify:");
+    displayStudentsByIndex(stu, res, resLen);
+    scanf("%d", &i);
+
+    printf("\nPlease input stuNO:");
+    scanf("%s", stu[res[i]].stuNo);
+    printf("\nPlease input name:");
+    scanf("%s", stu[res[i]].name);
+    printf("\nPlease input phone:");
+    scanf("%s", stu[res[i]].phone);
+    printf("\nPlease input weChat:");
+    scanf("%s", stu[res[i]].weChat);
+    printf("\nPlease input dormitory(a-b-c):");
+    scanf("%d-%d-%d", &stu[res[i]].dormitory[0], &stu[res[i]].dormitory[1], &stu[res[i]].dormitory[2]);
+    printf("\nPlease input gender (1=Male, 2=Female):");
+    scanf("%d", &stu[res[i]].gender);
+    printf("\nPlease input score:");
+    scanf("%lf", &stu[res[i]].score);
+    printf("\nFinished.");
+}
+
+void deleteStudent(struct Student stu[], int *len) {
+    int resLen = 0, i, res[100];
+    printf("\nWe need to select student first...");
+    searchStudent(stu, *len, res, &resLen);
+    printf("\nPlease select the one you want to delete:");
+    displayStudentsByIndex(stu, res, resLen);
+    scanf("%d", &i);
+
+
+    for (int j = res[i]; j < *len - 1; j--) {
+        stu[j] = stu[j + 1];
+    }
+    (*len)--;
+    printf("\nFinished.");
+}
+
+void sortByStuNo(struct Student stu[], int len) {
+    struct Student tmpStu;
+    for (int i = 0; i < len - 1; i++) {
+        for (int j = i + 1; j < len; j++)
+            if (strCmp(stu[i].stuNo, stu[j].stuNo)) {
+                tmpStu = stu[i];
+                stu[i] = stu[j];
+                stu[j] = tmpStu;
+            }
+    }
+    printf("\nFinished.");
+}
+
+void sortByName(struct Student stu[], int len) {
+    struct Student tmpStu;
+    for (int i = 0; i < len - 1; i++) {
+        for (int j = i + 1; j < len; j++)
+            if (strCmp(stu[i].name, stu[j].name)) {
+                tmpStu = stu[i];
+                stu[i] = stu[j];
+                stu[j] = tmpStu;
+            }
+    }
+    printf("\nFinished.");
+}
+
+void sortByGender(struct Student stu[], int len) {
+    struct Student tmpStu;
+    for (int i = 0; i < len - 1; i++) {
+        for (int j = i + 1; j < len; j++)
+            if (strCmp((stu[i].gender == 1 ? "Male" : "Female"), (stu[j].gender == 1 ? "Male" : "Female"))) {
+                tmpStu = stu[i];
+                stu[i] = stu[j];
+                stu[j] = tmpStu;
+            }
+    }
+    printf("\nFinished.");
+}
+
+void sortByPhone(struct Student stu[], int len) {
+    struct Student tmpStu;
+    for (int i = 0; i < len - 1; i++) {
+        for (int j = i + 1; j < len; j++)
+            if (strCmp(stu[i].phone, stu[j].phone)) {
+                tmpStu = stu[i];
+                stu[i] = stu[j];
+                stu[j] = tmpStu;
+            }
+    }
+    printf("\nFinished.");
+}
+
+void sortByWeChat(struct Student stu[], int len) {
+    struct Student tmpStu;
+    for (int i = 0; i < len - 1; i++) {
+        for (int j = i + 1; j < len; j++)
+            if (strCmp(stu[i].weChat, stu[j].weChat)) {
+                tmpStu = stu[i];
+                stu[i] = stu[j];
+                stu[j] = tmpStu;
+            }
+    }
+    printf("\nFinished.");
+}
+
+void sortByDormitory(struct Student stu[], int len) {
+    struct Student tmpStu;
+    for (int i = 0; i < len - 1; i++) {
+        for (int j = i + 1; j < len; j++)
+            if (stu[i].dormitory[0] > stu[j].dormitory[0] ||
+                (stu[i].dormitory[0] == stu[j].dormitory[0] && stu[i].dormitory[1] > stu[j].dormitory[1]) ||
+                (stu[i].dormitory[0] == stu[j].dormitory[0] && stu[i].dormitory[1] == stu[j].dormitory[1] &&
+                 stu[i].dormitory[2] > stu[j].dormitory[2])) {
+                tmpStu = stu[i];
+                stu[i] = stu[j];
+                stu[j] = tmpStu;
+            }
+    }
+    printf("\nFinished.");
+}
+
+void sortByScore(struct Student stu[], int len) {
+    struct Student tmpStu;
+    for (int i = 0; i < len - 1; i++) {
+        for (int j = i + 1; j < len; j++)
+            if (stu[i].score > stu[j].score) {
+                tmpStu = stu[i];
+                stu[i] = stu[j];
+                stu[j] = tmpStu;
+            }
+    }
+    printf("\nFinished.");
+}
+
+void statisticsData(struct Student stu[], int len){
+    double max=0,min=0;
+    double sum=0;
+    int mCtr=0,fCtr=0;
+    for (int i=0;i<len;i++){
+        sum += stu[i].score;
+        if(stu[i].score>max)
+            max=stu[i].score;
+        if(stu[i].score<min)
+            min=stu[i].score;
+        if (stu[i].gender==1)
+            mCtr++;
+        else
+            fCtr++;
+    }
+    int maxIdx[100],maxLen=0;
+    int minIdx[100],minLen=0;
+    for (int i=0;i<len;i++){
+        if (stu[i].score==max)
+            maxIdx[maxLen++]=i;
+        if (stu[i].score==min)
+            minIdx[minLen++]=i;
+    }
+
+    printf("\n%20s:%5d","Students",len);
+    printf("\n%20s:%5d","Male",mCtr);
+    printf("\n%20s:%5d","Female", fCtr);
+    printf("\n%20s:%.2lf","MaxScore",max);
+    printf("\n%20s:%.2lf","MinScore",min);
+    printf("\n%20s:%.2lf","AvgScore",sum/(double )len);
+
+    printf("\nThe information of MaxScore students are:");
+    displayStudentsByIndex(stu,maxIdx, maxLen);
+    printf("\nThe information of MaxScore students are:");
+    displayStudentsByIndex(stu,minIdx, minLen);
+}
+
+void clearData(int *len){
+    *len=0;
+    printf("\nFinished.");
+}
+
+void showSelectData(struct Student stu[], int len) {
+    printf("\nPlease choose the columns you want to show (1=show, 0=hide, default--0):");
+    int selection[7] = {0};
+    printf("\nStuNO?:");
+    scanf("%d", &selection[0]);
+    printf("\nName?:");
+    scanf("%d", &selection[1]);
+    printf("\nPhone?:");
+    scanf("%d", &selection[2]);
+    printf("\nWeChat?:");
+    scanf("%d", &selection[3]);
+    printf("\nDormitory?:");
+    scanf("%d", &selection[4]);
+    printf("\nGender?:");
+    scanf("%d", &selection[5]);
+    printf("\nScore?");
+    scanf("%d", &selection[6]);
+
+    // print
+    // %-10s  %-8s  %-13s  %-10s  %-2d-%2d-%2d    %-7s  %.2lf
+    printf("%s%s%s%s%s%s%s\n",
+           (selection[0] == 0 ? "" : "stuNo      "),
+           (selection[1] == 0 ? "" : " name     "),
+           (selection[2] == 0 ? "" : " phone         "),
+           (selection[3] == 0 ? "" : " weChat     "),
+           (selection[4] == 0 ? "" : " dormitory "),
+           (selection[5] == 0 ? "" : " gender  "),
+           (selection[6] == 0 ? "" : " score ")
+    );
+
+
+    for (int i = 0; i < len; i++) {
+        if (selection[0] != 0)
+            printf("%-10s ", stu[i].stuNo);
+        if (selection[1] != 0)
+            printf(" %-8s ", stu[i].name);
+        if (selection[2] != 0)
+            printf(" %-13s ", stu[i].phone);
+        if (selection[3] != 0)
+            printf(" %-10s ", stu[i].weChat);
+        if (selection[4] != 0)
+            printf(" %-2d-%2d-%2d ", stu[i].dormitory[0], stu[i].dormitory[1], stu[i].dormitory[2]);
+        if (selection[5] != 0)
+            printf(" %-7s ", (stu[i].gender == 1 ? "Male" : "Female"));
+        if (selection[6] != 0)
+            printf(" %.2lf ", stu[i].score);
+        printf("\n");
+    }
+}
+
+
+void displayStudent(struct Student stu) {
+    printf("\n%-10s  %-8s  %-13s  %-10s  %-2d-%2d-%2d    %-7s  %.2lf", stu.stuNo, stu.name, stu.phone, stu.weChat,
+           stu.dormitory[0],
+           stu.dormitory[1], stu.dormitory[2], (stu.gender == 1 ? "Male" : "Female"), stu.score);
+}
+
+void displayStudents(struct Student stu[], int len) {
+    //printf("\nID  stuNo  name     phone  weChat  dormitory  gender  score ");
+    for (int i = 0; i < len; i++) {
+        printf("\n%5d %-10s  %-8s  %-13s  %-10s  %-2d-%2d-%2d    %-7s  %.2lf", i, stu[i].stuNo, stu[i].name, stu[i].phone, stu[i].weChat,
+               stu[i].dormitory[0],
+               stu[i].dormitory[1], stu[i].dormitory[2], (stu[i].gender == 1 ? "Male" : "Female"), stu[i].score);
+    }
+}
+
+void displayStudentsByIndex(struct Student stu[], const int index[], int idxLen) {
+    struct Student tmpStudents[100];
+    for (int i = 0; i < idxLen; i++) {
+        tmpStudents[i] = stu[index[i]];
+    }
+    printf("\nIndex  stuNo       name      phone          weChat      dormitory  gender   score ");
+    displayStudents(tmpStudents, idxLen);
+}
+
+int strIn(const char *s, const char *S) {
+    if (s[0] == '\0')
+        return 0;
+    int i = 0, j;
+    while (S[i] != '\0') {
+        if (S[i++] != s[0])
+            continue;
+        for (j = 1; (s[j] != '\0' && S[i + j-1] != '\0'); j++) {
+            if (s[j] != S[i + j -1])
+                break;
+        }
+        if (s[j] == '\0')
+            return 1;
+    }
+    return 0;
+}
+
+int strCmp(const char *a, const char *b) {
+    int i = 0;
+    while (a[i] != '\0' && b[i] != '\0') {
+        if (a[i] > b[i])
+            return 1;
+        i++;
+    }
+    if (a[i] == '\0')
+        return 0;
+    return 1;
+}
+
+char *double2str(double val, char *out) {
+    sprintf(out, "%.2lf", val);
+    return out;
+}
+
+char *dormitory2str(struct Student stu, char *out) {
+    int ptr = 0;
+    for (int i = 0; i < 3; i++) {
+        int val = stu.dormitory[i], d[10] = {0}, l = 0;
+        while (val != 0) {
+            d[l++] = val % 10;
+            val = val / 10;
+        }
+        for (int j = 0; j < l; j++)
+            out[ptr++] = (char) ('0' + d[l - j - 1]);
+        out[ptr++] = '-';
+    }
+    ptr--;
+    out[ptr--] = '\0';
+    return out;
+}
+

@@ -1,0 +1,120 @@
+/*
+ * Name:MadLibs
+ * Date:18 Oct, 2021
+ * LastUpdate: 14 Dec, 2021
+ * Author: Chen ZiRui
+ * CopyRight: all rights reserved
+ * Version: 0.1.2 F
+ */
+#include "stdio.h"
+#include "stdlib.h"
+#include "time.h"
+
+void drawMainMenu(); // 1 story 0 quit
+void getStoryInputs(char *qs[], char *myOut[], int n);
+
+void renderStory(char **storyTmp, char **usrStoryInputs, const int index[], int n);
+
+
+char *story1[32] = {"One day you wanted to eat ", // 0
+                    ".However, there're no ", //0
+                    " left in your fridge. So you went to ", // 1
+                    " to buy some. You went there, only to find a ", //2
+                    " left there. Sadly, you bought it and ate it instead.\n"};
+char *q1[32] = {"Input a Noun.\n", "Input a place\n", "Input a Noun.\n"};
+int index1[32] = {0, 0, 1, 2, 31, 31, 31, 31};
+char *story2[32] = {"It is ", // 0
+                    " outside, but you want to " //1
+                    " outdoor. So you put on your " //2
+                    " ", //3
+                    " and ", //1
+                    " out door.\n" //-1
+};
+char *q2[32] = {
+        "Input a weather:\n",
+        "Input an activity:\n",
+        "Input a thing you wear:\n"
+};
+int index2[32] = {0, 1, 2, 3, 2, 31, 31, 31, 31, 31, 31};
+char *story3[32] = {
+        "It's time to ", //0
+        ", but little ", //1
+        " wants to play ",//2
+        ". So ", // 3
+        " play ", //2
+        " with little ", //1
+        ". After that, they ", //0
+        " together.\n"
+};
+char *q3[32] = {
+        "Input an activity:\n",
+        "Input a name\n",
+        "Input another activity\n",
+        "Input another name\n",
+};
+int index3[32] = {0, 1, 2, 3, 2, 1, 0, 31, 31, 31, 31, 31, 31, 31, 31};
+
+
+int main() {
+    int usrInput = 1;
+    char *usrStoryInputs[32];
+    story1[31] = " ";
+    story2[31] = " ";
+    story3[31] = " ";
+    for (int i = 0; i < 32; i++)
+        usrStoryInputs[i] = (char *) malloc(sizeof(char *) * 100);
+    printf("Press any key to continue...");
+    while (usrInput != 0) {
+        drawMainMenu();
+        //getchar();
+        scanf("%d", &usrInput);
+        if (usrInput == 1) {
+            getStoryInputs(q1, usrStoryInputs, 3);
+            renderStory(story1, usrStoryInputs, index1, 5);
+            system("pause");
+        }
+        if (usrInput == 2) {
+            getStoryInputs(q2, usrStoryInputs, 3);
+            renderStory(story2, usrStoryInputs, index2, 6);
+            system("pause");
+        }
+        if (usrInput == 3) {
+            getStoryInputs(q3, usrStoryInputs, 4);
+            renderStory(story3, usrStoryInputs, index3, 8);
+            system("pause");
+        }
+    }
+
+
+}
+
+void drawMainMenu() {
+    getchar();
+    system("cls");
+    printf("\n=========================================");
+    printf("\n                                         ");
+    printf("\n   1.story1             2.story2         ");
+    printf("\n   3.story3             0.quit           ");
+    printf("\n                                         ");
+    printf("\n                                         ");
+    printf("\n     Author:ZiRui Chen                   ");
+    printf("\n     ID: 21052107                        ");
+    printf("\n                                         ");
+    printf("\n=========================================");
+}
+
+void getStoryInputs(char *qs[], char *myOut[], int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%s\n", qs[i]);
+        scanf("%s", myOut[i]);
+    }
+}
+
+
+void renderStory(char **storyTmp, char **usrStoryInputs, const int index[], int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%s", storyTmp[i]);
+        printf("%s", usrStoryInputs[index[i]]);
+    }
+}
+

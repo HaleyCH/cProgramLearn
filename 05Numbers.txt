@@ -1,0 +1,247 @@
+/*
+ * Name:Numbers
+ * Date:29 Nov, 2021
+ * LastUpdate: 14 Dec, 2021
+ * Author: Chen ZiRui
+ * CopyRight: all rights reserved
+ * Version: 1.0.1 F
+ */
+#include "stdio.h"
+#include "stdlib.h"
+
+int intPow(int a, int b);
+
+void perfect();
+void friendly();
+void narcissistic();
+void armstrong();
+void pythagorean();
+void mantissa();
+void lcmGcd();
+
+void mainMenu();
+
+
+int main() {
+    int usrInput = 999;
+
+    while (usrInput != 0) {
+        system("cls");
+        mainMenu();
+        scanf("%d", &usrInput);
+        if (usrInput == 1) {
+            perfect();
+            getchar();
+        }
+        if (usrInput == 2) {
+            friendly();
+            getchar();
+        }
+        if (usrInput == 3) {
+            narcissistic();
+            getchar();
+        }
+        if (usrInput == 4) {
+            armstrong();
+            getchar();
+        }
+        if (usrInput == 5) {
+            pythagorean();
+            getchar();
+        }
+        if (usrInput == 6) {
+            mantissa();
+            getchar();
+        }
+        if (usrInput == 7) {
+            lcmGcd();
+            getchar();
+        }
+        getchar();
+    }
+}
+
+
+void mainMenu() {
+    system("color 09");
+    printf("\n================================MAIN_MENU===============================================");
+    printf("\n                                                                                        ");
+    printf("\n    1.perfectNum                                            2.friendlyNum               ");
+    printf("\n    3.narcissisticNum                                       4.armstrongNum              ");
+    printf("\n    5.pythagoreanTriple                                     6.mantissa                  ");
+    printf("\n    7.lowestCommonMultiple&GreatestCommonDivisor                                       ");
+    printf("\n                                 0.quit                                                 ");
+    printf("\n========================================================================================\n");
+}
+
+void perfect() {
+    int s, ss, e, ctr = 0;
+    printf("\nPlease input the start number:");
+    scanf("%d", &s);
+    printf("\nPlease input the end number:");
+    scanf("%d", &e);
+    ss = s;
+
+    for (; s <= e; s++) {
+        int sum = 1, j = 2;
+        // check
+        while (j < s) {
+            if (s % j == 0)
+                sum += j;
+
+            j++;
+        }
+        // output
+        if (sum == s) {
+            ctr++;
+            printf("\n%d is a perfect number: %d = 1", s, s);
+            int d = 2;
+            while (d < s) {
+                if (s % d == 0)
+                    printf(" + %d", d);
+
+                d++;
+            }
+        }
+    }
+    printf("\nThere are %d perfect number between %d and %d.", ctr, ss, e);
+}
+
+void friendly() {
+    int s, e, ctr = 0;
+    printf("\nPlease input the start number:");
+    scanf("%d", &s);
+    printf("\nPlease input the end number:");
+    scanf("%d", &e);
+
+    for (int i = s; i < e; i++) {
+        for (int j = i + 1; j <= e; j++) {
+            int sum1 = 1, sum2 = 1, d = 2;
+            // check
+            while (d < i) {
+                if (i % d == 0)
+                    sum1 += d;
+
+                d++;
+            }
+            d = 2;
+            while (d < j) {
+                if (j % d == 0)
+                    sum2 += d;
+                d++;
+            }
+            // output
+            if (sum1 == j && sum2 == i) {
+                ctr++;
+                printf("\n%d and %d are friendly numbers.", i, j);
+
+                printf("\n%d's divisors: 1", i);
+                d = 2;
+                while (d < i) {
+                    if (i % d == 0)
+                        printf(" + %d", d);
+                    d++;
+                }
+                printf("\n%d's divisors: 1", j);
+                d = 2;
+                while (d < j) {
+                    if (j % d == 0)
+                        printf(" + %d", d);
+                    d++;
+                }
+            }
+        }
+    }
+    printf("\nThere are %d friendly numbers between %d and %d.", ctr, s, e);
+}
+
+void narcissistic() {
+    printf("\nThe narcissistic numbers are: ");
+    for (int a = 1; a < 10; a++)
+        for (int b = 0; b < 10; b++)
+            for (int c = 0; c < 10; c++)
+                if (a * a * a + b * b * b + c * c * c == a * 100 + b * 10 + c)
+                    printf(" %d", a * 100 + b * 10 + c);
+}
+
+void armstrong() {
+    for (int i = 1; i < 9; i++) {
+        printf("\nThe armstrong number of %d digits are:", i);
+        for (int j = (int) intPow(10, (i - 1)); j < (int) intPow(10, i); j++) {
+            int  t = i;
+            int sum = 0;
+            while (t--)
+                sum = sum + intPow((j/ intPow(10,t)% 10),i);
+            if (sum == j)
+                printf(" %d", j);
+        }
+    }
+}
+
+void pythagorean() {
+    int s, e, ctr = 0;
+    printf("\nPlease input the start number:");
+    scanf("%d", &s);
+    printf("\nPlease input the end number:");
+    scanf("%d", &e);
+
+    for (int i = s; i <= e - 2; i++)
+        for (int j = i + 1; j <= e - 1; j++)
+            for (int k = j + 1; k <= e; k++)
+                if (i * i + j * j == k * k) {
+                    if (ctr % 4 == 0)
+                        printf("\n");
+                    printf("%-4d,%-4d,%-4d", i, j, k);
+                    ctr++;
+                    if (ctr % 4 != 0)
+                        printf("              ");
+                }
+    printf("\nThere are %d pythagorean triples between %d and %d.", ctr, s, e);
+}
+
+void mantissa() {
+    int b, e, d, tmp;
+    printf("\nPlease input a positive integer for the Base:");
+    scanf("%d", &b);
+    printf("\nPlease input a positive integer for the Exponent:");
+    scanf("%d", &e);
+    printf("\nPlease input a positive integer for the Digits:");
+    scanf("%d", &d);
+    tmp = d;
+    for (int i = 0; i < e; i++)
+        tmp = tmp * b % (int) intPow(10, d);
+    tmp = tmp % (int) intPow(10, d);
+
+    printf("\nThe last %d digits of %d to the %d intPow is %d .", d, b, e, tmp);
+}
+
+void lcmGcd() {
+    int s, e, sc, ec, tmp, c;
+    printf("\nPlease input the first number:");
+    scanf("%d", &s);
+    printf("\nPlease input the second number:");
+    scanf("%d", &e);
+    sc = s;
+    ec = e;
+    c = s % e;
+    while (c != 0) {
+        s = e;
+        e = c;
+        if (e > s) {
+            tmp = e;
+            e = s;
+            s = tmp;
+        }
+        c = s % e;
+    }
+    printf("\nThe LCM of %d and %d is %d .", sc, ec, e);
+    printf("\nThe GCD of %d and %d is %d .", sc, ec, sc * ec / e);
+}
+
+int intPow(int a, int b){
+    int tmp=1;
+    while (b-- >0){
+        tmp *= a;
+    }
+    return tmp;
+}

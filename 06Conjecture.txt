@@ -1,0 +1,261 @@
+/*
+ * Name:Conjecture
+ * Date:13 Dec, 2021
+ * LastUpdate: 13 Dec, 2021
+ * Author: Chen ZiRui
+ * CopyRight: all rights reserved
+ * Version: 0.1.2 F
+ */
+#include "stdio.h"
+#include "stdlib.h"
+
+
+void drawMainMenu();
+void goldbach();
+void collatz();
+void nico();
+void fourSquare();
+void sieve();
+void bridge();
+void tol();
+
+void nextPrime(int *i);
+int isPrime(int v);
+int intPow(int a, int x);
+
+int main() {
+    system("color 09");
+    int usrInput = 1;
+    printf("Press enter to continue...");
+    while (usrInput != 0) {
+        drawMainMenu();
+        //getchar();
+        scanf("%d", &usrInput);
+        if (usrInput == 1)
+            goldbach();
+        if (usrInput == 2)
+            collatz();
+        if (usrInput == 3)
+            nico();
+        if (usrInput == 4)
+            fourSquare();
+        if (usrInput == 5)
+            sieve();
+        if (usrInput == 6)
+            bridge();
+        if (usrInput == 7)
+            tol();
+
+        getchar();
+    }
+    system("cls");
+    printf("Bye!");
+}
+
+void drawMainMenu() {
+    getchar();
+    system("cls");
+    printf("\n============================================================");
+    printf("\n   1.Goldbach's Conjectures                                 ");
+    printf("\n   2.Collatz Conjecture                                     ");
+    printf("\n   3.Nico Chester Theorem                                   ");
+    printf("\n   4.Four Square Theorem                                    ");
+    printf("\n   5.Sieve of Eratosthenes                                  ");
+    printf("\n   6.Bride & Groom                                          ");
+    printf("\n   7.Truth or Lie                                           ");
+    printf("\n                       0.exit                               ");
+    printf("\n============================================================");
+}
+
+void nextPrime(int *i) {
+    while (!isPrime(++(*i)))
+        continue;
+}
+
+int isPrime(int v) {
+    for (int i = 2; i <= (int) v / 2; i++)
+        if (v % i == 0)
+            return 0;
+    return 1;
+}
+
+int intPow(int a, int x) {
+    int tmp = 1;
+    for (int i = 0; i < x; ++i) {
+        tmp = tmp * a;
+    }
+    return tmp;
+}
+
+void goldbach() {
+    system("cls");
+    printf("\n=======================Goldbach=============================");
+    int i, j, ctr, usrInput = -1;
+    while (usrInput != 0) {
+        ctr = 0;
+        printf("\nPlease input a number( enter 0 to return main menu.)");\
+        scanf("%d", &usrInput);
+        if (!usrInput)
+            break;
+        for (i = 1; i < usrInput; nextPrime(&i)) {
+            for (j = i; j < usrInput; nextPrime(&j)) {
+                if (usrInput == i + j) {
+                    ctr++;
+                    printf("\n%d = %d + %d", usrInput, i, j);
+                }
+            }
+        }
+        printf("\nThere are %d pair(s) prime numbers that add up to %d", ctr, usrInput);
+    }
+}
+
+void collatz() {
+    system("cls");
+    printf("\n=======================Collatz==============================");
+    int i, j, ctr, usrInput = -1;
+    while (usrInput != 0) {
+        ctr = 0;
+        printf("\nPlease input a number( enter 0 to return main menu.)");\
+                scanf("%d", &usrInput);
+        if (!usrInput)
+            break;
+        int usrInputRc = usrInput;
+        printf("\n%d", usrInput);
+        while (usrInput != 1) {
+            if (usrInput % 2 == 0) {
+                usrInput = usrInput / 2;
+            } else {
+                usrInput = usrInput * 3 + 1;
+            }
+            printf(" -> %d", usrInput);
+            ctr++;
+        }
+        printf("\nThere are %d steps to get to 1 from %d", ctr, usrInputRc);
+    }
+}
+
+void nico() {
+    system("cls");
+    printf("\n=======================Nico=================================");
+    int usrInput = -1, tmp;
+    while (usrInput != 0) {
+        printf("\nPlease input a number( enter 0 to return main menu.)");\
+                scanf("%d", &usrInput);
+        if (!usrInput)
+            break;
+        tmp = usrInput * usrInput - usrInput + 1;
+        usrInput = intPow(usrInput, 3);
+        printf("%d = %d", usrInput, tmp);
+        usrInput = usrInput - tmp;
+        while (usrInput > 0) {
+            tmp += 2;
+            printf(" + %d", tmp);
+            usrInput = usrInput - tmp;
+        }
+        usrInput = -1;
+    }
+}
+
+void fourSquare() {
+    system("cls");
+    printf("\n=======================fourSquare===========================");
+    int usrInput = -1, tmp, ctr = 0;
+    while (usrInput != 0) {
+        printf("\nPlease input a number( enter 0 to return main menu.)");\
+                scanf("%d", &usrInput);
+        if (!usrInput)
+            break;
+        int pa, pb, pc, pd;
+        for (int a = 0; a < usrInput / 2; a++) {
+            pa = intPow(a, 2);
+            for (int b = a; b < usrInput / 2; b++) {
+                pb = intPow(b, 2);
+                for (int c = b; c < usrInput / 2; c++) {
+                    pc = intPow(c, 2);
+                    for (int d = c; d < usrInput / 2; d++) {
+                        pd = intPow(d, 2);
+                        if (pa + pb + pc + pd == usrInput)
+                            printf("\n %d = %d^2 + %d^2 + %d^2 + %d^2", usrInput, a, b, c, d);
+                        else if (pa + pb + pc + pd > usrInput)
+                            break;
+                    }
+                }
+            }
+        }
+    }
+    printf("\nThere are %d solution(s).", ctr);
+}
+
+void sieve() {
+    system("cls");
+    printf("\n=======================Sieve================================");
+    int usrInput = -1, datas[5001] = {0};
+    while (usrInput != 0) {
+        printf("\nPlease input end number(<=5000, enter 0 to return main menu.)");\
+                scanf("%d", &usrInput);
+        if (!usrInput)
+            break;
+        for (int i = 2; i <= usrInput; i++) {
+            if (datas[i] == 0 && isPrime(i)) {
+                datas[i] = 1;
+                for (int j = 2; i * j <= usrInput; j++) {
+                    datas[i * j] = -1;
+                }
+            }
+        }
+        printf("\n");
+        for (int i = 2; i <= usrInput; i++) {
+            if (datas[i] == 1)
+                printf("%d ", i);
+        }
+    }
+}
+
+void bridge() {
+    printf("\n=======================bridge&grooms========================");
+    printf("\nThere are 3 brides (A, B, C) and 3 grooms (X, Y, Z).");
+    printf("\nA: I will marry X.");
+    printf("\nX: My fiance is C.");
+    printf("\nC: I will marry Z.");
+    printf("\nIt is known that they are all kidding.");
+    printf("\nThen, do you know who and who are a couple?");
+    printf("\nEnter any key to show answer.");
+    getchar();
+    for (int a = 1; a <= 3; a++)
+        for (int b = 1; b <= 3; b++)
+            for (int c = 1; c <= 3; c++) {
+                if (a != 1 && c != 1 && c != 3 && a != b && b != c && c != a) {
+                    printf("\nThe groom X's bride is %c", (a == 1) ? 'A' : (b == 1) ? 'B' : (c == 1) ? 'C' : '?');
+                    printf("\nThe groom Y's bride is %c", (a == 2) ? 'A' : (b == 2) ? 'B' : (c == 2) ? 'C' : '?');
+                    printf("\nThe groom Z's bride is %c", (a == 3) ? 'A' : (b == 3) ? 'B' : (c == 3) ? 'C' : '?');
+                }
+            }
+}
+
+void tol() {
+    printf("\n====================trueOrLie===============================");
+    // Ben a Bob b Bill c
+    // 0 lie 1 true
+    int sa, sb, sc;
+    printf("\nBen says that Bob is lying.\nBob says that Bill is lying.\nBill says that they are all lying.\nThen, do you know who is lying?\nPress any key to show answer.");
+    getchar();
+    for (int a = 0; a < 2; a++) {
+        for (int b = 0; b < 2; b++) {
+            for (int c = 0; c < 2; c++) {
+                sa=0;sb=0;sc=0;
+                if (b==0)
+                    sa=1;
+                if (c==0)
+                    sb=1;
+                if (a==0&&b==0)
+                    sc=1;
+                if (a==sa&&b==sb&&c==sc) {
+                    printf("\nA is %s.", (a == 1) ? "true" : "lying");
+                    printf("\nB is %s.", (b == 1) ? "true" : "lying");
+                    printf("\nC is %s.", (c == 1) ? "true" : "lying");
+                }
+            }
+        }
+    }
+
+}
