@@ -58,8 +58,8 @@ void drawMainMenu() {
     printf("\n   5.table              6.chessBoard     ");
     printf("\n   7.factorization      8.character      ");
     printf("\n             0.quit                      ");
-    printf("\n     Author:ZiRui Chen                   ");
-    printf("\n     ID: 21052107                        ");
+    printf("\n                                         ");
+    printf("\n                                         ");
     printf("\n                                         ");
     printf("\n=========================================");
 }
