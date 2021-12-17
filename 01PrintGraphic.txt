@@ -1,0 +1,89 @@
+/*
+ * Name:PrintGraphics
+ * Date:17, Dec, 2021
+ * LastUpdate:17, Dec, 2021
+ * Author: Chen ZiRui
+ * CopyRight: all rights reserved
+ * Version:0.0.0 F
+ */
+#include "stdio.h"
+#include "stdlib.h"
+
+void drawMainMenu();
+// MenuRelatedFunctions
+void draw1();
+void draw2();
+void draw3();
+
+// ProgramInnerFunctions
+
+int main() {
+    system("color 09");
+    printf("Press enter to enter...");
+    // Initial
+    int usrInput = 999;
+    while (usrInput != 0) {
+        getchar();
+        system("cls");
+        drawMainMenu();
+        // InformationFunctions( Not essential)
+        scanf("%d", &usrInput);
+        // CheckFunctions( For safety reasons)
+        if (usrInput == 1)
+            draw1();
+        if (usrInput==2)
+            draw2();
+        if (usrInput==3)
+            draw3();
+        getchar();
+    }
+}
+
+void drawMainMenu(){
+    printf("\n==========PRINT_GRAPHIC=======================");
+    printf("\n   1.tree                  2.face             ");
+    printf("\n   3.520                   0.exit             ");
+    printf("\n==============================================\n");
+}
+
+// MenuRelatedFunctions
+void draw1(){
+    printf("\n                                       ");
+    printf("\n                                       ");
+    printf("\n               #                       ");
+    printf("\n             #####                     ");
+    printf("\n            #######                    ");
+    printf("\n           #########                   ");
+    printf("\n         #############                 ");
+    printf("\n              |||                      ");
+    printf("\n              |||                      ");
+    printf("\n              |||                      ");
+    getchar();
+}
+void draw2(){
+
+    printf("\n                                       ");
+    printf("\n                                       ");
+    printf("\n                                       ");
+    printf("\n                                       ");
+    printf("\n        ##        ##                   ");
+    printf("\n     *                *                ");
+    printf("\n      ****************                 ");
+    printf("\n       *____________*                  ");
+    printf("\n                                       ");
+    getchar();
+}
+void draw3(){
+
+    printf("\n                                       ");
+    printf("\n   ######    #####      #####          ");
+    printf("\n   #        #    #     #     #         ");
+    printf("\n   ####     #    #     #     #         ");
+    printf("\n       #         #     #     #         ");
+    printf("\n        #       #      #     #         ");
+    printf("\n   #    #     #        #     #         ");
+    printf("\n   #####    ######      ####           ");
+    printf("\n                                       ");
+    getchar();
+}
+// ProgramInnerFunctions
