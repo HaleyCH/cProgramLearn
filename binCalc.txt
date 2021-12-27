@@ -4,7 +4,7 @@
  * LastUpdate: 7, Dec, 2021
  * Author: Chen ZiRui
  * CopyRight: all rights reserved
- * Version: 0.0.1
+ * Version: 0.0.2
  */
 #include "stdio.h"
 #include "stdlib.h"
@@ -22,6 +22,7 @@ void orMain();
 void notMain();
 void xorMain();
 void cryptoMain();
+void classifyMain();
 
 
 // ProgramInnerFunctions
@@ -61,6 +62,8 @@ int main() {
             xorMain();
         if (usrInput == 7)
             cryptoMain();
+        if (usrInput == 8)
+            classifyMain();
         fflush(stdin);
     }
 }
@@ -70,7 +73,7 @@ void drawMainMenu(){
     printf("\n  1.leftMove              2.rightMove         ");
     printf("\n  3.and                   4.or                ");
     printf("\n  5.nor                   6.xor               ");
-    printf("\n  7.crypto                                    ");
+    printf("\n  7.crypto                8.classify          ");
     printf("\n                0.quit                        ");
     printf("\n==============================================\n");
 }
@@ -92,6 +95,7 @@ void leftMoveMain(){
 }
 
 void rightMoveMain(){
+
     unsigned int curr=2147483648,c=0;
     unsigned int end= curr>>31;
     printf("\nRight Move Opt ( Enter q to quit ):");
@@ -162,6 +166,27 @@ void cryptoMain(){
     fprintf(outFile, "%s", charList);
     printf("\nFinish.");
 }
+
+void classifyMain(){
+    int engPos=0,zhPos=0;
+    char c,engString[128]={0},zhString[256]={0};
+    printf("\nPlease input a string with mixed Chinese and English:");
+    while (scanf("%c",&c)>=1){
+        if ((int )c<0){
+            zhString[zhPos++]=c;
+            scanf("%c",&c);
+            zhString[zhPos++]=c;
+        }else{
+            engString[engPos++]=c;
+        }
+    }
+    zhString[zhPos]='\0';
+    engString[engPos]='\0';
+    printf("\nzh-Han:%s",zhString);
+    printf("\nEnglish:%s",engString);
+    getchar();
+}
+
 // ProgramInnerFunctions
 char* zeroFormat(char *s, int totalLen){
     int currLen=0;
