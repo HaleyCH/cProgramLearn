@@ -203,6 +203,7 @@ void addStudent(struct Student stu[], int *len) {
     scanf("%lf", &newStu.score);
     stu[(*len)++] = newStu;
     printf("\nFinished.");
+    displayStudent(stu[*len]);
 }
 
 void modifyStudent(struct Student stu[], int len) {
@@ -215,6 +216,7 @@ void modifyStudent(struct Student stu[], int len) {
     }
     printf("\nPlease select the one you want to modify:");
     displayStudentsByIndex(stu, res, resLen);
+    printf("\n");
     scanf("%d", &i);
 
     printf("\nPlease input stuNO:");
@@ -232,6 +234,7 @@ void modifyStudent(struct Student stu[], int len) {
     printf("\nPlease input score:");
     scanf("%lf", &stu[res[i]].score);
     printf("\nFinished.");
+    displayStudent(stu[len]);
 }
 
 void deleteStudent(struct Student stu[], int *len) {
@@ -244,10 +247,11 @@ void deleteStudent(struct Student stu[], int *len) {
     }
     printf("\nPlease select the one you want to delete:");
     displayStudentsByIndex(stu, res, resLen);
+    printf("\n");
     scanf("%d", &i);
 
 
-    for (int j = res[i]; j < *len - 1; j--) {
+    for (int j = res[i]; j < *len - 1; j++) {
         stu[j] = stu[j + 1];
     }
     (*len)--;
