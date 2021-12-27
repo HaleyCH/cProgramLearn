@@ -1,7 +1,7 @@
 /*
  * Name:Numbers
  * Date:29 Nov, 2021
- * LastUpdate: 14 Dec, 2021
+ * LastUpdate: 27 Dec, 2021
  * Author: Chen ZiRui
  * CopyRight: all rights reserved
  * Version: 1.0.1 F
@@ -18,7 +18,6 @@ void armstrong();
 void pythagorean();
 void mantissa();
 void lcmGcd();
-
 void mainMenu();
 
 
@@ -31,33 +30,26 @@ int main() {
         scanf("%d", &usrInput);
         if (usrInput == 1) {
             perfect();
-            getchar();
         }
         if (usrInput == 2) {
             friendly();
-            getchar();
         }
         if (usrInput == 3) {
             narcissistic();
-            getchar();
         }
         if (usrInput == 4) {
             armstrong();
-            getchar();
         }
         if (usrInput == 5) {
             pythagorean();
-            getchar();
         }
         if (usrInput == 6) {
             mantissa();
-            getchar();
         }
         if (usrInput == 7) {
             lcmGcd();
-            getchar();
         }
-        getchar();
+        fflush(stdin);
     }
 }
 
@@ -105,6 +97,8 @@ void perfect() {
         }
     }
     printf("\nThere are %d perfect number between %d and %d.", ctr, ss, e);
+    fflush(stdin);
+    getchar();
 }
 
 void friendly() {
@@ -153,6 +147,8 @@ void friendly() {
         }
     }
     printf("\nThere are %d friendly numbers between %d and %d.", ctr, s, e);
+    fflush(stdin);
+    getchar();
 }
 
 void narcissistic() {
@@ -162,20 +158,24 @@ void narcissistic() {
             for (int c = 0; c < 10; c++)
                 if (a * a * a + b * b * b + c * c * c == a * 100 + b * 10 + c)
                     printf(" %d", a * 100 + b * 10 + c);
+    fflush(stdin);
+    getchar();
 }
 
 void armstrong() {
     for (int i = 1; i < 9; i++) {
         printf("\nThe armstrong number of %d digits are:", i);
         for (int j = (int) intPow(10, (i - 1)); j < (int) intPow(10, i); j++) {
-            int  t = i;
+            int t = i;
             int sum = 0;
             while (t--)
-                sum = sum + intPow((j/ intPow(10,t)% 10),i);
+                sum = sum + intPow((j / intPow(10, t) % 10), i);
             if (sum == j)
                 printf(" %d", j);
         }
     }
+    fflush(stdin);
+    getchar();
 }
 
 void pythagorean() {
@@ -197,6 +197,8 @@ void pythagorean() {
                         printf("              ");
                 }
     printf("\nThere are %d pythagorean triples between %d and %d.", ctr, s, e);
+    fflush(stdin);
+    getchar();
 }
 
 void mantissa() {
@@ -213,6 +215,8 @@ void mantissa() {
     tmp = tmp % (int) intPow(10, d);
 
     printf("\nThe last %d digits of %d to the %d intPow is %d .", d, b, e, tmp);
+    fflush(stdin);
+    getchar();
 }
 
 void lcmGcd() {
@@ -236,11 +240,13 @@ void lcmGcd() {
     }
     printf("\nThe LCM of %d and %d is %d .", sc, ec, e);
     printf("\nThe GCD of %d and %d is %d .", sc, ec, sc * ec / e);
+    fflush(stdin);
+    getchar();
 }
 
-int intPow(int a, int b){
-    int tmp=1;
-    while (b-- >0){
+int intPow(int a, int b) {
+    int tmp = 1;
+    while (b-- > 0) {
         tmp *= a;
     }
     return tmp;

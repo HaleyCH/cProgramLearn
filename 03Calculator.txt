@@ -1,7 +1,7 @@
 /*
  * Name:Calculator
  * Date:18 Oct, 2021
- * LastUpdate: 14 Dec, 2021
+ * LastUpdate: 27 Dec, 2021
  * Author: Chen ZiRui
  * CopyRight: all rights reserved
  * Version: 1.0.1 F
@@ -46,7 +46,7 @@ int main() {
             practice_div();
         if (usrInput == 5)
             practice_chal();
-            getchar();
+        fflush(stdin);
     }
     exit_message();
 }
@@ -113,15 +113,15 @@ int create_chal() {
         case 1:
             ans = create_add();
             break;
-        case 2:
-            ans = create_sub();
-            break;
-        case 3:
-            ans = create_mul();
-            break;
-        case 4:
-            ans = create_div();
-            break;
+            case 2:
+                ans = create_sub();
+                break;
+                case 3:
+                    ans = create_mul();
+                    break;
+                    case 4:
+                        ans = create_div();
+                        break;
     }
     return ans;
 }
@@ -145,8 +145,10 @@ void exit_message() {
 }
 
 void message(int ctr) {
-    if (ctr==0)
+    if (ctr==0){
         printf("\nWrong answer!");
+        return;
+    }
 
     if (ctr <= 3)
         printf("\nGreat!");

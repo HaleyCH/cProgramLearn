@@ -1,7 +1,7 @@
 /*
  * Name:Applications
  * Date:21 Oct, 2021
- * LastUpdate: 14 Dec, 2021
+ * LastUpdate: 27 Dec, 2021
  * Author: Chen ZiRui
  * CopyRight: all rights reserved
  * Version: 0.0.1 F
@@ -23,7 +23,7 @@ void characterAnalysis();
 int main() {
     system("color 09");
     int usrInput = 1;
-    printf("Press any key to continue...");
+    printf("Press enter to continue...");
     while (usrInput != 0) {
         drawMainMenu();
         //getchar();
@@ -44,7 +44,7 @@ int main() {
             factorizationMenu();
         if (usrInput == 8)
             characterAnalysis();
-        getchar();
+        fflush(stdin);
     }
 }
 
@@ -58,9 +58,6 @@ void drawMainMenu() {
     printf("\n   5.table              6.chessBoard     ");
     printf("\n   7.factorization      8.character      ");
     printf("\n             0.quit                      ");
-    printf("\n                                         ");
-    printf("\n                                         ");
-    printf("\n                                         ");
     printf("\n=========================================");
 }
 
@@ -82,8 +79,8 @@ void triangle() {
     for (int c = 1; c <= n; c++)
         for (int a = 1; a < c; a++)
             for (int b = 1; b < a; b++) {
-//                if (a + b < c)
-//                    continue;
+                //                if (a + b < c)
+                //                    continue;
                 if (a * a + b * b == c * c) {
                     cnt++;
                     printf("%d %d %d \n", b, a, c);
@@ -132,7 +129,7 @@ void chessBoard() {
                 printf("##");
             else
                 printf("  ");
-        printf("\n");
+            printf("\n");
     }
 }
 
@@ -146,6 +143,7 @@ void factorizationMenu(){
         if (uInput==888)
             break;
         factorize(uInput);
+        fflush(stdin);
         getchar();
     }
 }
@@ -160,20 +158,19 @@ void factorize(int i){
                 printf(" %d *",j);
             else
                 printf(" %d",j);
-        else{
-            j++;
-            continue;
-        }
-        i = i/j;
+            else{
+                j++;
+                continue;
+            }
+            i = i/j;
     }
 }
 
 void characterAnalysis(){
-    char string[1025],c;
-    scanf("%s",string);
+    printf("\nPlease input a string:");
+    char c;
     int i=0,ctrL=0,ctrN=0,ctrS=0,ctrO=0;
-    while (string[i]!='\0'){
-        c = string[i];
+    while (scanf("%c",&c)>=1){
         if (c>'0'&&c<'9')
             ctrN++;
         else if (c==' '||c=='\n')
@@ -183,7 +180,7 @@ void characterAnalysis(){
         else
             ctrO++;
         i++;
-        }
+    }
     printf("Letters: %d \n",ctrL);
     printf("Numbers: %d\n",ctrN);
     printf("Spaces: %d\n",ctrS);

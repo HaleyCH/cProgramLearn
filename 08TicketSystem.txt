@@ -65,7 +65,7 @@ int main() {
             printAll(theaterMap, sizeX, sizeY);
             search(theaterMap);
         }
-        getchar();
+        fflush(stdin);
     }
 }
 

@@ -1,7 +1,7 @@
 /*
  * Name:Conjecture
  * Date:13 Dec, 2021
- * LastUpdate: 13 Dec, 2021
+ * LastUpdate: 27 Dec, 2021
  * Author: Chen ZiRui
  * CopyRight: all rights reserved
  * Version: 0.1.2 F
@@ -46,7 +46,7 @@ int main() {
         if (usrInput == 7)
             tol();
 
-        getchar();
+        fflush(stdin);
     }
     system("cls");
     printf("Bye!");
@@ -76,7 +76,7 @@ int isPrime(int v) {
     for (int i = 2; i <= (int) v / 2; i++)
         if (v % i == 0)
             return 0;
-    return 1;
+        return 1;
 }
 
 int intPow(int a, int x) {
@@ -116,7 +116,7 @@ void collatz() {
     while (usrInput != 0) {
         ctr = 0;
         printf("\nPlease input a number( enter 0 to return main menu.)");\
-                scanf("%d", &usrInput);
+        scanf("%d", &usrInput);
         if (!usrInput)
             break;
         int usrInputRc = usrInput;
@@ -140,7 +140,7 @@ void nico() {
     int usrInput = -1, tmp;
     while (usrInput != 0) {
         printf("\nPlease input a number( enter 0 to return main menu.)");\
-                scanf("%d", &usrInput);
+        scanf("%d", &usrInput);
         if (!usrInput)
             break;
         tmp = usrInput * usrInput - usrInput + 1;
@@ -162,7 +162,7 @@ void fourSquare() {
     int usrInput = -1, tmp, ctr = 0;
     while (usrInput != 0) {
         printf("\nPlease input a number( enter 0 to return main menu.)");\
-                scanf("%d", &usrInput);
+        scanf("%d", &usrInput);
         if (!usrInput)
             break;
         int pa, pb, pc, pd;
@@ -192,7 +192,7 @@ void sieve() {
     int usrInput = -1, datas[5001] = {0};
     while (usrInput != 0) {
         printf("\nPlease input end number(<=5000, enter 0 to return main menu.)");\
-                scanf("%d", &usrInput);
+        scanf("%d", &usrInput);
         if (!usrInput)
             break;
         for (int i = 2; i <= usrInput; i++) {
@@ -220,6 +220,7 @@ void bridge() {
     printf("\nIt is known that they are all kidding.");
     printf("\nThen, do you know who and who are a couple?");
     printf("\nEnter any key to show answer.");
+    fflush(stdin);
     getchar();
     for (int a = 1; a <= 3; a++)
         for (int b = 1; b <= 3; b++)
@@ -238,6 +239,7 @@ void tol() {
     // 0 lie 1 true
     int sa, sb, sc;
     printf("\nBen says that Bob is lying.\nBob says that Bill is lying.\nBill says that they are all lying.\nThen, do you know who is lying?\nPress any key to show answer.");
+    fflush(stdin);
     getchar();
     for (int a = 0; a < 2; a++) {
         for (int b = 0; b < 2; b++) {

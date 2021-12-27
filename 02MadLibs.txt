@@ -1,7 +1,7 @@
 /*
  * Name:MadLibs
  * Date:18 Oct, 2021
- * LastUpdate: 14 Dec, 2021
+ * LastUpdate: 27 Dec, 2021
  * Author: Chen ZiRui
  * CopyRight: all rights reserved
  * Version: 0.1.2 F
@@ -51,11 +51,12 @@ char *q3[32] = {
         "Input a name\n",
         "Input another activity\n",
         "Input another name\n",
-};
+        };
 int index3[32] = {0, 1, 2, 3, 2, 1, 0, 31, 31, 31, 31, 31, 31, 31, 31};
 
 
 int main() {
+    system("color 09");
     int usrInput = 1;
     char *usrStoryInputs[32];
     story1[31] = " ";
@@ -91,15 +92,9 @@ int main() {
 void drawMainMenu() {
     getchar();
     system("cls");
-    printf("\n=========================================");
-    printf("\n                                         ");
+    printf("\n=========MadLibs=========================");
     printf("\n   1.story1             2.story2         ");
     printf("\n   3.story3             0.quit           ");
-    printf("\n                                         ");
-    printf("\n                                         ");
-    printf("\n                                         ");
-    printf("\n                                         ");
-    printf("\n                                         ");
     printf("\n=========================================");
 }
 
