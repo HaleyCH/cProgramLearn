@@ -1,0 +1,223 @@
+/*
+ * Name: binCalc
+ * Date: 27, Dec, 2021
+ * LastUpdate: 7, Dec, 2021
+ * Author: Chen ZiRui
+ * CopyRight: all rights reserved
+ * Version: 0.0.1
+ */
+#include "stdio.h"
+#include "stdlib.h"
+#include "limits.h"
+#include "time.h"
+
+void drawMainMenu();
+// MenuRelatedFunctions
+/* Each Function that need to display information should add a `getchar();` at the end of the function.
+ */
+void leftMoveMain();
+void rightMoveMain();
+void andMain();
+void orMain();
+void notMain();
+void xorMain();
+void cryptoMain();
+
+
+// ProgramInnerFunctions
+char* zeroFormat(char *s, int totalLen);
+void printFormatBin32(char *s, int spaceDiv);
+char* intToBin(int val, char *s);
+void printIntToBin(int val);
+
+void printUIntAB(unsigned int a, unsigned int b);
+
+
+int main() {
+    system("color 09");
+    printf("Press enter to enter...");
+    // Initial
+    time_t t;
+    srand((unsigned) time(&t));
+    int usrInput = 999;
+    while (usrInput != 0) {
+        getchar();
+        system("cls");
+        drawMainMenu();
+        // InformationFunctions( Not essential)
+        scanf("%d", &usrInput);
+        // CheckFunctions( For safety reasons)
+        if (usrInput == 1)
+            leftMoveMain();
+        if (usrInput == 2)
+            rightMoveMain();
+        if (usrInput == 3)
+            andMain();
+        if (usrInput == 4)
+            orMain();
+        if (usrInput == 5)
+            notMain();
+        if (usrInput == 6)
+            xorMain();
+        if (usrInput == 7)
+            cryptoMain();
+        fflush(stdin);
+    }
+}
+
+void drawMainMenu(){
+    printf("\n=============binCalc==========================");
+    printf("\n  1.leftMove              2.rightMove         ");
+    printf("\n  3.and                   4.or                ");
+    printf("\n  5.nor                   6.xor               ");
+    printf("\n  7.crypto                                    ");
+    printf("\n                0.quit                        ");
+    printf("\n==============================================\n");
+}
+
+// MenuRelatedFunctions
+void leftMoveMain(){
+    int curr=1,c=0;
+    int end = curr<<31;
+    printf("\nLeft Move Opt ( Enter q to quit ):");
+    while (curr>end&&c!='q'){
+        putchar('\n');
+        printIntToBin(curr);
+        curr=curr<<1;
+        fflush(stdin);
+        c=getchar();
+    }
+    printIntToBin(curr);
+    getchar();
+}
+
+void rightMoveMain(){
+    unsigned int curr=2147483648,c=0;
+    unsigned int end= curr>>31;
+    printf("\nRight Move Opt ( Enter q to quit ):");
+    while (curr>end&&c!='q'){
+        putchar('\n');
+        printIntToBin(curr);
+        curr=curr>>1;
+        fflush(stdin);
+        c=getchar();
+    }
+    printIntToBin(curr);
+    getchar();
+}
+
+void andMain(){
+    unsigned int a=rand()%UINT_MAX;
+    unsigned int b=rand()%UINT_MAX;
+    printf("\nAND opt:");
+    printUIntAB(a,b);
+    printIntToBin(a&b);
+    getchar();
+}
+
+void orMain(){
+    unsigned int a=rand()%UINT_MAX;
+    unsigned int b=rand()%UINT_MAX;
+    printf("\nOR opt:");
+    printUIntAB(a,b);
+    printIntToBin(a|b);
+    getchar();
+}
+
+void notMain(){
+    unsigned int a=rand()%UINT_MAX;
+    printf("\nNOT opt:\na: ");
+    printIntToBin(a);
+    printf("\n~a:");
+    printIntToBin(~a);
+    getchar();
+}
+
+void xorMain(){
+    unsigned int a=rand()%UINT_MAX;
+    unsigned int b=rand()%UINT_MAX;
+    printf("\nXOR opt:");
+    printUIntAB(a,b);
+    printIntToBin(a^b);
+    getchar();
+}
+
+void cryptoMain(){
+    unsigned char charList[128]={0},c;
+    int key, lenS=0;
+    printf("\nPlease input a string:");
+    while (scanf("%c",&charList[lenS++])>=1)
+        continue;
+    charList[lenS] = '\0';
+    printf("\nPlease input the key (<=2^31) to encrypt or decrypt:");
+    scanf("%d",&key);
+    for (int i=0;i<lenS;i++){
+        charList[i] = charList[i]^key;
+    }
+    printf("\nAfter convert:\n%s\nEnter S to save the code, otherwise quit:", charList);
+    scanf("%c",&c);
+    if (c!='S')
+        return;
+    FILE *outFile=fopen("./out.txt","wa");
+    fprintf(outFile, "%s", charList);
+    printf("\nFinish.");
+}
+// ProgramInnerFunctions
+char* zeroFormat(char *s, int totalLen){
+    int currLen=0;
+    while (s[currLen]!='\0'){
+        currLen++;
+    }
+    if(currLen>=totalLen)
+        return s;
+    while (currLen>=0){
+        s[totalLen--]=s[currLen--];
+    }
+    while (totalLen>=0){
+        s[totalLen--]='0';
+    }
+    return s;
+}
+
+void printFormatBin32(char *s, int spaceDiv){
+    int totalLen = 0;
+    while (s[totalLen]!='\0'){
+        totalLen++;
+    }
+    if (totalLen<=spaceDiv){
+        printf("%s",s);
+        return;
+    }
+    int res = totalLen % spaceDiv;
+    int pos=0;
+    while (s[pos]!='\0'){
+        if((pos-res)%spaceDiv==0)
+            putchar(' ');
+        putchar(s[pos++]);
+    }
+
+}
+
+void printIntToBin(int val){
+    char outBuff[64];
+    printFormatBin32(zeroFormat(intToBin(val, outBuff), 32), 4);
+}
+
+char* intToBin(int val, char *s){
+    unsigned int currPos=2147483648;
+    int pos=0;
+    while (pos<32){
+        s[pos++] = val&currPos?'1':'0';
+        currPos=currPos/2;
+    }
+    s[pos]='\0';
+    return s;
+}
+
+void printUIntAB(unsigned int a, unsigned int b){
+    printf("\na:");
+    printIntToBin(a);
+    printf("\nb:");
+    printIntToBin(b);
+    printf("\n--------------------------------------------\n  ");
+}
