@@ -1,0 +1,112 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+
+// 删除注释
+void Pack(FILE *src, FILE *dst);
+
+int main() {
+    char *sname, *dname;
+    FILE *sfile, *dfile;
+
+
+    sname = "./in.txt";
+    dname = "./out.txt";
+
+    sfile = fopen(sname, "rb");
+    if (!sfile) {
+        printf("%s 无法打开!\n", sfile);
+    }
+    dfile = fopen(dname, "wb");
+    if (!dfile) {
+        printf("%s 无法打开!\n", dfile);
+    }
+
+    if (sfile && dfile) {
+        printf("正在整理...");
+        Pack(sfile, dfile);
+        puts("整理完成!");
+    }
+
+    if (sfile) {
+        fclose(sfile);
+    }
+    if (dfile) {
+        fclose(dfile);
+    }
+    return 0;
+}
+
+/* 你提交的代码将被嵌在这里 */
+
+void Pack(FILE *src, FILE *dst) {  // 将行注释和块注释替换为空格
+    int c, tmp;
+    int lineCommentFlag = -1, blockCommentFlag = -1, quoteFlag = -1;
+    while (1) {
+        c = fgetc(src);
+        if (c < 0)
+            break;
+
+        if (c == '\\') {
+            if (lineCommentFlag > 0 || blockCommentFlag > 0) {
+                fgetc(src);
+                continue;
+            }
+            fputc(c, dst);
+            fputc(fgetc(src), dst);
+            continue;
+        }
+
+        if (quoteFlag > 0) { // 闭合引号
+            if (c == '"') {
+                quoteFlag *= -1;
+            }
+            fputc(c, dst);
+            continue;
+        }
+
+        if (lineCommentFlag > 0) { // 闭合行注释
+            if (c == '\n') {
+                lineCommentFlag *= -1;
+                fputc(c, dst);
+            }
+            continue;
+        }
+
+        if (blockCommentFlag > 0) { //闭合块注释
+            if (c == '*') {
+                if (fgetc(src) == '/') {
+                    blockCommentFlag *= -1;
+                    continue;
+                }
+                fseek(src, -1L, SEEK_CUR);
+            }
+            continue;
+        }
+
+        if (c=='/'){ // 判定注释开头
+            tmp = fgetc(src);
+            if (tmp=='*'){
+                blockCommentFlag *= -1;
+                fputc(' ', dst);
+                continue;
+            }
+            if (tmp=='/'){
+                lineCommentFlag *= -1;
+                fputc(' ', dst);
+                continue;
+            }
+            fseek(src, -1L, SEEK_CUR);
+            fputc(c, dst);
+            continue;
+        }
+
+        if (c=='"'){ //判定引号开头
+            quoteFlag *= -1;
+            fputc(c, dst);
+            continue;
+        }
+
+        fputc(c, dst);
+    }
+}
