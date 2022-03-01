@@ -1,10 +1,10 @@
 /*
  * Name: table
  * Date: 21 Feb. 2022
- * LastUpdate: 22 Feb. 2022
+ * LastUpdate: 27 Feb. 2022
  * Author: Chen ZiRui
  * CopyRight: all rights reserved
- * Version: 0.0.2
+ * Version: 0.0.3 F
  */
 #include "stdio.h"
 #include "stdlib.h"
@@ -23,8 +23,6 @@ void insertNode(struct ListNode *n, int val);
 void removeNextNode(struct ListNode *n);
 
 void clearNodes(struct ListNode *n);
-
-void setVal(struct ListNode *n, int val);
 
 void swapNode(struct ListNode *a, struct ListNode *b);
 
@@ -60,6 +58,8 @@ void removeByValue(struct ListNode *head);
 void removeDuplicate(struct ListNode *head);
 
 void invertTable(struct ListNode *head);
+
+void partitionList(struct ListNode *head);
 
 void importFromFile(struct ListNode *head);
 
@@ -111,15 +111,13 @@ int main() {
         if (usrInput == 11)
             invertTable(head);
         if (usrInput == 12)
-            continue;
+            partitionList(head);
         if (usrInput == 13)
             importFromFile(head);
         if (usrInput == 14)
             exportToFile(head);
         if (usrInput == 15)
             maxPlatform(head);
-        if (usrInput == 16)
-            continue;
 
         fflush(stdin);
     }
@@ -128,12 +126,12 @@ int main() {
 
 void drawMainMenu() {
     printf("\n==============================================");
-    printf("\n   1.createTable           2.showStatus       ");
-    printf("\n   3.clearTable            4.sortTable        ");
+    printf("\n   1.createList            2.showStatus       ");
+    printf("\n   3.clearList             4.sortList         ");
     printf("\n   5.findByIndex           6.findByValue      ");
     printf("\n   7.insertByIndex         8.removeByIndex    ");
     printf("\n   9.removeByValue         10.removeDuplicate ");
-    printf("\n   11.invertTable          12.???             ");
+    printf("\n   11.invertList           12.partitionList   ");
     printf("\n   13.importFromFile       14.exportToFile    ");
     printf("\n   15.maxPlatform          0.exit             ");
     printf("\n==============================================\n");
@@ -156,10 +154,6 @@ void removeNextNode(struct ListNode *n) {
     n->next = tmp;
     free(delNode);
     delNode = NULL;
-}
-
-void setVal(struct ListNode *n, int val) {
-    n->val = val;
 }
 
 void clearNodes(struct ListNode *n) {
@@ -233,6 +227,7 @@ void showStatusMain(struct ListNode *head) {
 // ProgramInnerFunctions
 void createTable(struct ListNode *head) {
     clearNodes(head);
+    head->val = -1;
     for (int i = 0; i < 39; i++) {
         insertNode(head, rand() % 9 + 1);
     }
@@ -346,71 +341,107 @@ void removeDuplicate(struct ListNode *head) {
     }
 }
 
-void invertTable(struct ListNode *head){
+void invertTable(struct ListNode *head) {
     struct ListNode *newHead = (struct ListNode *) malloc(sizeof(struct ListNode));
-    struct ListNode *p=head->next;
+    struct ListNode *p = head->next;
     newHead->next = NULL;
     newHead->val = -1;
-    while (p!=NULL){
+    while (p != NULL) {
         insertNode(newHead, p->val);
         p = p->next;
     }
     clearNodes(head);
     head->next = newHead->next;
-//    free(newHead);
-//    newHead=NULL;
+    free(newHead);
+    newHead = NULL;
 }
 
-void importFromFile(struct ListNode *head){
+void partitionList(struct ListNode *head) {
+    struct ListNode *newHead = (struct ListNode *) malloc(sizeof(struct ListNode)), *p = head->next, *tmp;
+    newHead->val = -1;
+    newHead->next = NULL;
+
+    int breakPos = 0, v;
+    fflush(stdin);
+    printf("\nPlease input the value you want to break:");
+    scanf("%d", &v);
+
+    while (p != NULL) {
+        insertNode(newHead, p->val);
+        p = p->next;
+    }
+    sortTable(newHead);
+    clearTable(head);
+//    displayTable(newHead);
+    p = newHead;
+    while (p->next != NULL && p->next->val >= v) {
+        p = p->next;
+        breakPos++;
+    }
+    tmp = p->next;
+    p->next = NULL;
+    p = tmp;
+    while (p!=NULL){
+        insertNode(newHead,p->val);
+        p = p->next;
+    }
+    clearNodes(tmp);
+    head->next = newHead->next;
+    free(newHead);
+}
+
+void importFromFile(struct ListNode *head) {
     fflush(stdin);
     char fp[30];
     printf("\nPlease input the file path you want to import from:");
-    scanf("%s",fp);
-    FILE *f = fopen(fp,"r");
+    scanf("%s", fp);
+    FILE *f = fopen(fp, "r");
 
     clearTable(head);
     int v;
-    fscanf(f,"-1 %d ", &v);
+    fscanf(f, "-1 %d ", &v);
     insertNode(head, v);
-    while (fscanf(f, "%d ",&v)>=1){
+    while (fscanf(f, "%d ", &v) >= 1) {
         insertNode(head, v);
     }
     fclose(f);
     invertTable(head);
 }
 
-void exportToFile(struct ListNode *head){
+void exportToFile(struct ListNode *head) {
     fflush(stdin);
     char fp[30];
     printf("\nPlease input the file path you want to export to:");
-    scanf("%s",fp);
-    FILE *f = fopen(fp,"w");
+    scanf("%s", fp);
+    FILE *f = fopen(fp, "w");
 
     struct ListNode *p = head;
-    while (p!=NULL){
-        fprintf(f,"%d ", p->val);
+    while (p != NULL) {
+        fprintf(f, "%d ", p->val);
         p = p->next;
     }
     fclose(f);
 }
 
-void maxPlatform(struct ListNode *head){
-    int startPos=0,maxLen=0,lenPlatform=0,ctr,maxPos;
-    struct ListNode *p=head->next,*tmp;
+void maxPlatform(struct ListNode *head) {
+    int startPos = 0, maxLen = 0, lenPlatform = 0, ctr, maxPos;
+    struct ListNode *p = head->next, *tmp;
 
-    while (p->next!=NULL){
-        ctr=0;
+    while (p->next != NULL) {
+        ctr = 0;
         tmp = p;
-        while(tmp->val==p->val){
+        while (tmp->val == p->val) {
             ctr++;
-            tmp=tmp->next;
+            tmp = tmp->next;
         }
-        if (ctr>maxLen){
-            maxPos=startPos;
-            maxLen=ctr;
+        if (ctr > maxLen) {
+            maxPos = startPos;
+            maxLen = ctr;
         }
-        p=p->next;
+        p = p->next;
         startPos++;
     }
-    printf("\nThe max platform start at index %d, its length is %d.",maxPos, maxLen);
+    printf("\nThe max platform start at index %d, its length is %d.", maxPos, maxLen);
 }
+
+//

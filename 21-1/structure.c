@@ -21,6 +21,8 @@ int main() {
     printf("Press enter to enter...");
     // Initial
     int usrInput = 999;
+
+
     while (usrInput != 0) {
         getchar();
         system("cls");
@@ -30,7 +32,7 @@ int main() {
         // CheckFunctions( For safety reasons)
         if (usrInput == 1)
             continue;
-        getchar();
+        fflush(stdin);
     }
 }
 
